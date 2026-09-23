@@ -1,0 +1,18 @@
+{
+  "version": "1.3.6.1",
+  "built": 330,
+  "themeCounts": {
+    "mechanics_authority": 66,
+    "npc_intent_engine_resolution": 22,
+    "resolution_lifecycle": 22,
+    "failure_forward": 44,
+    "epistemic_discipline": 44,
+    "creative_permission": 22,
+    "agency": 22,
+    "continuity": 22,
+    "informative_dm": 22,
+    "target_constraints": 22,
+    "resource_authority": 22
+  },
+  "policy": "Project-authored V6.5-native seeds teach product-specific authority, roll lifecycle, agency, continuity and narrative craft without importing foreign mechanics."
+}

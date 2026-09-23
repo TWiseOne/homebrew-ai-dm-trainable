@@ -1,0 +1,50 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "AI RPG DM normalized training candidate",
+  "type": "object",
+  "required": [
+    "id",
+    "source",
+    "lane",
+    "status",
+    "provenance",
+    "dimensions",
+    "payload"
+  ],
+  "properties": {
+    "id": {
+      "type": "string"
+    },
+    "source": {
+      "type": "string"
+    },
+    "lane": {
+      "enum": [
+        "dm_behaviour",
+        "rules_retrieval",
+        "rules_reference",
+        "state_transition"
+      ]
+    },
+    "status": {
+      "enum": [
+        "candidate",
+        "quarantine",
+        "rejected",
+        "reviewed"
+      ]
+    },
+    "provenance": {
+      "type": "object"
+    },
+    "dimensions": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "payload": {
+      "type": "object"
+    }
+  }
+}

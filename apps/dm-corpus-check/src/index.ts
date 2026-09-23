@@ -1,0 +1,5 @@
+import fs from "node:fs";
+const files=["dm-training/principles/product.json","dm-training/preferences/starter.json","dm-training/provenance/sources.json","evals/v6/continuity-scenarios.json","evals/v6/v6.1-scenarios.json","evals/v6/v6.2-scenarios.json","evals/v6/v6.2-multiturn-scenes.json","evals/v6/v6.3-scenarios.json","evals/v6/v6.4-scenarios.json","evals/v6/v6.5-scenarios.json","dm-training/annotations/dimensions.json","dm-training/provenance/training-policy.json"];
+let ok=true;for(const f of files){try{const x=JSON.parse(fs.readFileSync(f,"utf8"));if(!x||((Array.isArray(x))&&x.length===0))throw new Error("empty");console.log(`OK ${f}`)}catch(e){ok=false;console.error(`FAIL ${f}: ${e}`)}}
+const prefs=JSON.parse(fs.readFileSync("dm-training/preferences/starter.json","utf8"));for(const p of prefs){for(const k of ["id","scenario","bad","good","preferred","provenance"])if(!p[k]){ok=false;console.error(`FAIL preference ${p.id||"?"}: missing ${k}`)}}
+console.log(ok?"Corpus structure valid.":"Corpus structure invalid.");process.exitCode=ok?0:2;

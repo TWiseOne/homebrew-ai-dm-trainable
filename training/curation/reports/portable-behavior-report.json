@@ -1,0 +1,36 @@
+{
+  "version": "1.3.6.1",
+  "built": 1633,
+  "themeCounts": {
+    "unresolved_result": 1481,
+    "resource_authority": 638,
+    "target_constraints": 490,
+    "continuity": 733,
+    "failure_forward": 173,
+    "turn_handoff": 187,
+    "human_roll_boundary": 123,
+    "npc_intent_engine_resolution": 675,
+    "pacing": 179,
+    "agency": 33
+  },
+  "primaryThemeCounts": {
+    "unresolved_result": 1367,
+    "turn_handoff": 119,
+    "resource_authority": 19,
+    "failure_forward": 13,
+    "npc_intent_engine_resolution": 48,
+    "continuity": 42,
+    "target_constraints": 4,
+    "agency": 14,
+    "pacing": 6,
+    "human_roll_boundary": 1
+  },
+  "lessonsPerRecord": {
+    "3": 1525,
+    "1": 79,
+    "2": 29
+  },
+  "fallbackAuthorityDiscipline": 0,
+  "sourceRecordsContainingForeignRuntimeSignals": 1633,
+  "policy": "Theme detection excludes system/tool-schema text. Each source receives only 1-3 evidence-supported portable lessons; raw dnd_dm_v3 messages and tool calls never enter teacher prompts."
+}

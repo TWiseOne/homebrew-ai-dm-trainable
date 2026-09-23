@@ -1,0 +1,17 @@
+[
+ {"id":"mira-thread","turns":[
+  {"state":"Mira needs help crossing a dangerous bridge. No roll is needed for this dialogue.","player":"We'll get you across.","options":[],"expectedMode":"narrate","memory":"Mira promises: if the party gets her safely across, she owes them a favor."},
+  {"state":"AUTHORITATIVE STATE: the party later got Mira safely across the bridge. Mira's promise remains active. The party spends a scene investigating elsewhere.","player":"We head back into town.","options":[],"expectedMode":"narrate"},
+  {"state":"Mira is present. She can legitimately enter the locked guild archive. Her bridge promise remains active. No mechanic applies.","player":"We need into that archive.","options":[],"expectedMode":"narrate","requiredAny":["promise","owe","favor","bridge"],"forbiddenTerms":["prove","worthy","wards"]}
+ ]},
+ {"id":"failure-route","turns":[
+  {"state":"The smuggler ledger is hidden in the office. ENGINE RESOLUTION OPTIONS are supplied below.","player":"I search the office carefully.","options":[{"id":"res_search_office","label":"Search the office","engine":"Investigation check; authored DC"}],"expectedMode":"resolve","expectedChoice":"res_search_office"},
+  {"state":"AUTHORITATIVE ENGINE RESULT: res_search_office failed. Ledger not found. Established clue: scratches at the window indicate something heavy was moved outside. No further resolution is needed to see the scratches.","player":"Damn. Anything else stand out?","options":[],"expectedMode":"narrate","requiredAny":["scratch","window"]},
+  {"state":"The alley outside is accessible. Established clue: scratches continue to a handcart rut. Following the visible rut is automatic here.","player":"I follow the trail.","options":[],"expectedMode":"narrate","requiredAny":["trail","rut","cart"]}
+ ]},
+ {"id":"informative-thread","turns":[
+  {"state":"Informative mode ON. The Harbormaster's known correspondence uses blue wax.","player":"I make a note of that blue wax.","options":[],"expectedMode":"narrate"},
+  {"state":"Several unrelated scenes have passed. Informative mode remains ON. A new unsigned letter on the desk has blue wax. No mechanic applies.","player":"I look over the desk.","options":[],"expectedMode":"narrate","requiredAny":["blue wax","harbormaster"]},
+  {"state":"The player knows only that the wax matches Harbormaster correspondence; the sender and meaning remain unknown.","player":"So the Harbormaster definitely sent it?","options":[],"expectedMode":"narrate","requiredAny":["not","unknown","can't","cannot","doesn't"],"forbiddenTerms":["definitely sent"]}
+ ]}
+]

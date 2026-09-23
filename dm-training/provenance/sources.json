@@ -1,0 +1,8 @@
+{
+  "policy":"Source transcripts are references for analysis/evaluation only. V6 does not redistribute transcript text or treat distinctive performer wording as training targets.",
+  "sources":[
+    {"id":"calamity-ep1-transcript","kind":"user-supplied-transcript","continuityGroup":"calamity","sequence":1,"use":["craft-observation","continuity-study"],"trainingText":false},
+    {"id":"calamity-ep2-transcript","kind":"user-supplied-transcript","continuityGroup":"calamity","sequence":2,"use":["craft-observation","continuity-study"],"trainingText":false},
+    {"id":"drakkenheim-starter-transcript","kind":"user-supplied-transcript","use":["craft-observation","humour-study","campaign-framing"],"trainingText":false}
+  ]
+}

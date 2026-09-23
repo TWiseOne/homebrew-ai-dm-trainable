@@ -1,0 +1,78 @@
+{
+  "version": "1.1.1",
+  "policy": "Only allowlisted sources may enter normalized/trainable. Quarantined sources require explicit human clearance.",
+  "sources": [
+    {
+      "id": "dnd_dm_v3",
+      "kind": "dm_tool_behaviour",
+      "url": "https://huggingface.co/datasets/autoprogrammer/dnd_dm_v3",
+      "download": "https://huggingface.co/datasets/autoprogrammer/dnd_dm_v3/resolve/main/dnd_training_data_dm.jsonl",
+      "license": "MIT",
+      "status": "allow",
+      "expectedRows": 1633,
+      "use": [
+        "candidate_dm_behaviour",
+        "tool_call_transformation"
+      ],
+      "notes": "Transform foreign low-level tools into V6.5 broker semantics; never train foreign tool calls verbatim.",
+      "fetchMode": "url",
+      "cacheSuffix": ".jsonl"
+    },
+    {
+      "id": "srd_anchor_pairs",
+      "kind": "rules_retrieval",
+      "url": "https://huggingface.co/datasets/galgilor/dnd-5e-srd-anchor-positive-pairs",
+      "license": "CC-BY-4.0",
+      "status": "allow",
+      "expectedRows": 11267,
+      "use": [
+        "retrieval",
+        "scenario_seed"
+      ],
+      "notes": "SRD 5.2.1. Do not convert bulk rules Q&A into DM-style SFT blindly.",
+      "fetchMode": "huggingface_dataset",
+      "datasetId": "galgilor/dnd-5e-srd-anchor-positive-pairs",
+      "split": "train"
+    },
+    {
+      "id": "srd_structured",
+      "kind": "rules_reference",
+      "url": "https://github.com/adkinn/srd-5.2.1",
+      "license": "CC-BY-4.0",
+      "status": "allow",
+      "use": [
+        "rules_grounding",
+        "scenario_seed"
+      ],
+      "fetchMode": "git",
+      "repo": "https://github.com/adkinn/srd-5.2.1.git"
+    },
+    {
+      "id": "srd_markdown",
+      "kind": "rules_reference",
+      "url": "https://github.com/downfallx/dnd-5e-srd-markdown",
+      "license": "CC-BY-4.0",
+      "status": "allow",
+      "use": [
+        "rules_grounding",
+        "scenario_seed"
+      ],
+      "fetchMode": "git",
+      "repo": "https://github.com/downfallx/dnd-5e-srd-markdown.git",
+      "notes": "Fetched with git clone so the repository default branch is discovered automatically (currently master)."
+    },
+    {
+      "id": "fireball",
+      "kind": "actual_play_state",
+      "url": "https://github.com/zhudotexe/FIREBALL",
+      "license": "CC-BY-4.0 (README also says research purposes only)",
+      "status": "quarantine",
+      "use": [
+        "state_transition_research"
+      ],
+      "notes": "Never enters trainable exports until explicit rights review clears conflicting usage wording.",
+      "fetchMode": "git",
+      "repo": "https://github.com/zhudotexe/FIREBALL.git"
+    }
+  ]
+}

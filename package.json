@@ -1,0 +1,44 @@
+{
+  "name": "ai-rpg",
+  "version": "0.6.0",
+  "private": true,
+  "type": "module",
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "test": "npm run build && node dist/tests/v06.test.js",
+    "demo": "npm run build && node dist/apps/demo/src/index.js",
+    "ollama:test": "npm run build && node --env-file-if-exists=.env dist/apps/ollama-smoke/src/index.js",
+    "dm:eval": "npm run build && node --env-file-if-exists=.env dist/apps/dm-eval/src/index.js",
+    "dm:eval:v6": "npm run build && node --env-file-if-exists=.env dist/apps/dm-eval-v6/src/index.js",
+    "dm:v6:continuity": "npm run dm:eval:v6 -- --suite continuity --guidance",
+    "dm:corpus:check": "npm run build && node dist/apps/dm-corpus-check/src/index.js",
+    "dm:v6.1": "npm run dm:eval:v6 -- --suite v6.1 --guidance",
+    "dm:v6.2": "npm run dm:eval:v6 -- --suite v6.2 --guidance",
+    "dm:v6.2:multiturn": "npm run dm:eval:v6 -- --suite v6.2-multiturn --guidance",
+    "dm:v6.3": "npm run dm:eval:v6 -- --suite v6.3 --guidance",
+    "dm:v6.3.3": "npm run dm:eval:v6 -- --suite v6.3 --guidance",
+    "dm:v6.4": "npm run dm:eval:v6 -- --suite v6.4 --guidance",
+    "dm:v6.5": "npm run dm:eval:v6 -- --suite v6.5 --guidance",
+    "dm:training:export": "npm run build && node dist/apps/dm-training-export/src/index.js",
+    "dm:training:sources": "python3 training/scripts/source_report.py",
+    "dm:training:fetch": "python3 training/scripts/fetch_sources.py",
+    "dm:training:normalize": "python3 training/scripts/normalize_sources.py",
+    "dm:training:curate": "python3 training/scripts/curate_candidates.py",
+    "dm:training:qa": "python3 training/scripts/qa_training_set.py",
+    "dm:training:curriculum": "python3 training/scripts/build_curriculum.py",
+    "dm:training:generate": "python3 training/scripts/generate_gold_candidates.py",
+    "dm:training:validate": "python3 training/scripts/validate_gold_candidates.py",
+    "dm:training:promote": "python3 training/scripts/promote_reviewed.py",
+    "dm:training:envelopes": "python training/scripts/build_authority_envelopes.py",
+    "dm:training:review": "python training/scripts/review_candidates.py",
+    "dm:training:native": "python3 training/scripts/build_project_native_seeds.py",
+    "dm:training:regression": "python3 training/scripts/run_v136_regression.py"
+  },
+  "devDependencies": {
+    "@types/node": "^24.0.0",
+    "typescript": "^6.0.0"
+  }
+}

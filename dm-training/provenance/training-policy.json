@@ -1,0 +1,13 @@
+{
+  "version":"6.5",
+  "foundationFrozen":true,
+  "allowedSources":["project-authored","project-authored-generalized-from-eval-pattern","licensed-or-user-authorized-derived-technique"],
+  "forbiddenTrainingSources":["evals/**","data/eval-results/**","raw commercial adventure text without redistribution/training rights"],
+  "rules":[
+    "Do not train on benchmark prompts or expected answers.",
+    "Generalize observed failure modes into new situations before adding them to training data.",
+    "Preserve provenance on every example.",
+    "Keep mechanics authority and narrative authority examples separately labelable.",
+    "Do not mark model-generated facts as canon merely because they appeared in a preferred answer."
+  ]
+}

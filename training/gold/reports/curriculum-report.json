@@ -1,0 +1,87 @@
+{
+  "version": "1.3.6.1",
+  "requested": 2000,
+  "built": 2000,
+  "sourcePolicy": {
+    "shares": {
+      "srd_anchor_pairs": 0.65,
+      "dnd_dm_v3": 0.2,
+      "project_native": 0.15
+    },
+    "dndDmV3ThemeCaps": {
+      "unresolved_result": 120,
+      "npc_intent_engine_resolution": 80,
+      "resource_authority": 55,
+      "target_constraints": 45,
+      "turn_handoff": 45,
+      "continuity": 30,
+      "failure_forward": 15,
+      "agency": 10,
+      "pacing": 10,
+      "human_roll_boundary": 5,
+      "authority_discipline": 5
+    }
+  },
+  "sourceCounts": {
+    "srd_anchor_pairs": 1391,
+    "project_native": 313,
+    "dnd_dm_v3": 296
+  },
+  "categoryCounts": {
+    "exploration": 195,
+    "spellcasting": 243,
+    "combat": 575,
+    "creatures": 93,
+    "other": 93,
+    "conditions": 93,
+    "movement": 93,
+    "checks": 134,
+    "classes_features": 93,
+    "equipment": 93,
+    "saving_throws": 114,
+    "rest_resources": 51,
+    "social": 64,
+    "death": 51,
+    "concentration": 15
+  },
+  "dndDmV3PrimaryThemeCounts": {
+    "unresolved_result": 120,
+    "turn_handoff": 45,
+    "resource_authority": 19,
+    "failure_forward": 13,
+    "npc_intent_engine_resolution": 48,
+    "continuity": 30,
+    "target_constraints": 4,
+    "agency": 10,
+    "pacing": 6,
+    "human_roll_boundary": 1
+  },
+  "projectNativeThemeCounts": {
+    "npc_intent_engine_resolution": 21,
+    "target_constraints": 20,
+    "resolution_lifecycle": 22,
+    "mechanics_authority": 62,
+    "failure_forward": 40,
+    "informative_dm": 21,
+    "epistemic_discipline": 44,
+    "resource_authority": 22,
+    "continuity": 22,
+    "creative_permission": 18,
+    "agency": 21
+  },
+  "dimensionCounts": {
+    "exploration": 93,
+    "narrativeAuthority": 650,
+    "engineAuthority": 1410,
+    "epistemicDiscipline": 400,
+    "agency": 662,
+    "creativePermission": 111,
+    "pacing": 297,
+    "continuity": 123,
+    "failureForward": 74,
+    "informativeDm": 21,
+    "social": 21,
+    "tone": 51
+  },
+  "note": "Source-aware composition: SRD supplies rules evidence; dnd_dm_v3 is capped behavioral inspiration; project-native seeds teach product-specific lifecycle and DM craft. Source suitability determines composition."
+}

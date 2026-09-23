@@ -1,0 +1,22 @@
+# Training V1 reference recipe. Requires a CUDA Linux environment.
+model_name_or_path: Qwen/Qwen3-8B
+output_dir: training/output/qwen3-8b-dm-sft-v1
+train_file: training/datasets/exports/sft-train.jsonl
+validation_file: training/datasets/exports/sft-validation.jsonl
+seed: 6501
+max_seq_length: 4096
+load_in_4bit: true
+lora_r: 32
+lora_alpha: 64
+lora_dropout: 0.05
+learning_rate: 0.0001
+num_train_epochs: 3
+per_device_train_batch_size: 1
+gradient_accumulation_steps: 16
+warmup_ratio: 0.05
+logging_steps: 1
+save_strategy: epoch
+eval_strategy: epoch
+bf16: true
+gradient_checkpointing: true
+packing: false

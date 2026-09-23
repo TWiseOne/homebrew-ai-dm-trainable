@@ -1,0 +1,19 @@
+
+.DS_Store
+.env
+.env.*
+dist/
+node_modules/
+
+data/
+
+__pycache__/
+*.pyc
+
+# External training source cache / generated candidates
+training/cache/*
+!training/cache/.gitkeep
+training/normalized/*
+!training/normalized/.gitkeep
+training/quarantine/*
+!training/quarantine/.gitkeep

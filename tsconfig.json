@@ -1,0 +1,1 @@
+{"compilerOptions":{"target":"ES2022","module":"NodeNext","moduleResolution":"NodeNext","strict":true,"outDir":"dist","rootDir":".","declaration":true,"sourceMap":true,"skipLibCheck":true,"types":["node"]},"include":["apps/**/*.ts","packages/**/*.ts","tests/**/*.ts"],"exclude":["packages/ai/src/legacy-v05.ts"]}

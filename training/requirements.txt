@@ -1,0 +1,2 @@
+# Compatibility alias for ingestion only. Prefer requirements-ingest.txt.
+-r requirements-ingest.txt

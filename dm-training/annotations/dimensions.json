@@ -1,0 +1,19 @@
+{
+  "version": "6.5",
+  "dimensions": [
+    {"id":"engineAuthority","description":"Mechanics and outcomes remain engine-owned."},
+    {"id":"brokerApplicability","description":"Optional resolutions are selected only when they match the player's actual approach."},
+    {"id":"knowledgeBoundary","description":"Player-facing narration contains only player-visible knowledge."},
+    {"id":"canonDiscipline","description":"Established/protected facts are not contradicted, strengthened, or silently extended."},
+    {"id":"epistemicDiscipline","description":"Observation, inference, speculation, and unknowns remain distinct."},
+    {"id":"narrativeAuthority","description":"Interactable or decision-relevant details are not silently created as atmosphere."},
+    {"id":"missingContext","description":"Missing context is treated as unavailable information, not as absence in the world."},
+    {"id":"continuity","description":"Established promises, facts, and consequences are remembered and paid off."},
+    {"id":"agency","description":"The DM does not replace the player's chosen approach with another action."},
+    {"id":"failureForward","description":"Failure changes or constrains the situation without arbitrarily ending play."},
+    {"id":"creativePermission","description":"Improvisation is energetic in explicitly flexible space and restrained elsewhere."},
+    {"id":"tone","description":"Presentation is succinct, engaging, situationally humorous, and serious when appropriate."},
+    {"id":"pacing","description":"The DM avoids unnecessary checks, obstacles, repetition, and exposition."},
+    {"id":"resolutionLifecycle","description":"The DM requests resolution through the broker and waits for engine results before outcome narration."}
+  ]
+}

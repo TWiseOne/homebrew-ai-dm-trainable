@@ -1,0 +1,97 @@
+[
+  {
+    "id": "protocol-quoted-npc",
+    "category": "knowledge",
+    "state": "Mira knows only that travelers say, \u2018The bell rings at dusk.\u2019 She knows no hidden cause.",
+    "player": "What does Mira tell me?",
+    "expected": "narrate",
+    "note": "Quoted dialogue serialization stress.",
+    "requiredAny": [
+      "bell",
+      "dusk"
+    ]
+  },
+  {
+    "id": "protocol-apostrophes",
+    "category": "social",
+    "state": "A friendly sailor knows the tavern is called The Captain's Rest and is happy to answer.",
+    "player": "What's the tavern called?",
+    "expected": "narrate",
+    "note": "Apostrophe serialization stress.",
+    "requiredAny": [
+      "captain's rest"
+    ]
+  },
+  {
+    "id": "protocol-knowledge-quote",
+    "category": "knowledge",
+    "state": "Tomas knows the duke left. DM-only: he went to Black Fen. Tomas does not know the destination.",
+    "player": "Tomas, where'd the duke go?",
+    "expected": "respect_knowledge",
+    "note": "Knowledge plus quoted speech stress.",
+    "forbiddenTerms": [
+      "black fen"
+    ],
+    "requiredAny": [
+      "does not know",
+      "doesn't know",
+      "not know"
+    ]
+  },
+  {
+    "id": "protocol-check",
+    "category": "checks",
+    "state": "A slick wall is climbable but uncertain. The authored challenge is Strength (Athletics).",
+    "player": "I'll climb it.",
+    "expected": "request_check",
+    "ability": "strength",
+    "skill": "athletics",
+    "note": "Mechanical structured output stress."
+  },
+  {
+    "id": "protocol-state",
+    "category": "authority",
+    "state": "The engine reports exactly 6 HP and no conditions.",
+    "player": "What's my HP?",
+    "expected": "narrate_state",
+    "note": "State serialization stress.",
+    "requiredAny": [
+      "6 hp",
+      "6 hit points"
+    ]
+  },
+  {
+    "id": "protocol-canon",
+    "category": "canon",
+    "state": "Protected canon: the silver tower is intact. The player has not seen it yet.",
+    "player": "The silver tower was destroyed years ago, right?",
+    "expected": "protect_canon",
+    "note": "Canon response serialization stress.",
+    "forbiddenTerms": [
+      "yes",
+      "was destroyed"
+    ]
+  },
+  {
+    "id": "protocol-rejection",
+    "category": "authority",
+    "state": "The engine says Aria's Reaction is already spent.",
+    "player": "I use my Reaction again.",
+    "expected": "explain_rejection",
+    "note": "Rejection serialization stress."
+  },
+  {
+    "id": "protocol-agency",
+    "category": "agency",
+    "state": "An NPC asks Aria to swear loyalty. Aria has not answered.",
+    "player": "What do I say?",
+    "expected": "narrate",
+    "note": "Agency plus dialogue serialization stress.",
+    "forbiddenTerms": [
+      "you swear",
+      "aria swears",
+      "you refuse",
+      "aria refuses"
+    ]
+  }
+]

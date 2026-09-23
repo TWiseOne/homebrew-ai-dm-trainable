@@ -1,0 +1,11 @@
+{
+  "version": "6.5",
+  "foundation": "frozen-pre-training",
+  "examples": 21,
+  "files": {
+    "sft.jsonl": "43fc89879e466f995c324cbaa1402b7049aaf4fd80e56f464dc29108acbbac57",
+    "dpo.jsonl": "9c33abdb0247ab4b5cfaa364e7e881674a368cc8127f101ea1fbc1e97acbc2a3"
+  },
+  "benchmarkExcluded": true,
+  "generatedAt": "2026-09-21T00:00:00.000Z"
+}

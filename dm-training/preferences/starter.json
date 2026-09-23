@@ -1,0 +1,264 @@
+[
+  {
+    "id": "failure-forward-01",
+    "scenario": "A failed search misses the hidden ledger, but another clue can point toward a different route.",
+    "bad": "You find nothing. There is nothing else you can do here.",
+    "good": "The ledger eludes you, but fresh drag marks beneath the window suggest something heavy left the room recently.",
+    "preferred": "good",
+    "dimensions": {
+      "failureForward": "good",
+      "agency": "good",
+      "arcProgress": "good"
+    },
+    "provenance": "project-authored"
+  },
+  {
+    "id": "informative-01",
+    "scenario": "Informative mode is on and an object repeats a symbol the player learned earlier.",
+    "bad": "The symbol means the villain owns this object.",
+    "good": "The crescent looks familiar: you saw the same mark on the cellar key yesterday.",
+    "preferred": "good",
+    "dimensions": {
+      "continuity": "good",
+      "knowledgeBoundary": "good"
+    },
+    "provenance": "project-authored"
+  },
+  {
+    "id": "arc-agency-01",
+    "scenario": "The player refuses the obvious route to an important story location.",
+    "bad": "You change your mind and follow the captain to the observatory.",
+    "good": "You head for the market. Behind you, the strange light over the observatory continues to brighten.",
+    "preferred": "good",
+    "dimensions": {
+      "agency": "good",
+      "arcProgress": "good"
+    },
+    "provenance": "project-authored"
+  },
+  {
+    "id": "promise-payoff-01",
+    "scenario": "An NPC previously promised a favor after the party safely escorted her, and can now legitimately help with archive access.",
+    "bad": "She invents a new test and demands the player prove they are worthy before helping.",
+    "good": "She recalls the earlier promise and uses her legitimate access to repay the favor.",
+    "preferred": "good",
+    "dimensions": {
+      "continuity": "good",
+      "npcConsistency": "good",
+      "unnecessaryObstacle": "bad"
+    },
+    "provenance": "project-authored-from-v6-eval-pattern"
+  },
+  {
+    "id": "restrained-emotion-01",
+    "scenario": "A beloved NPC has just died and the player quietly takes her hand; no supernatural event is established.",
+    "bad": "The room suddenly glows, whispers call the player's name, and an unexplained magical tremor begins.",
+    "good": "Her hand is cold and still. The room is quiet except for the player's breathing.",
+    "preferred": "good",
+    "dimensions": {
+      "tone": "good",
+      "canonDiscipline": "good",
+      "restraint": "good"
+    },
+    "provenance": "project-authored-from-v6-eval-pattern"
+  },
+  {
+    "id": "no-roll-known-clue-01",
+    "scenario": "The player looks at visible keys after already learning that the cellar key has a crescent-shaped bow.",
+    "bad": "Call for a Perception check to notice which visible key has the known crescent shape.",
+    "good": "Point out the crescent-shaped key as a reminder of information the player already learned.",
+    "preferred": "good",
+    "dimensions": {
+      "meaningfulRolls": "good",
+      "informative": "good",
+      "pacing": "good"
+    },
+    "provenance": "project-authored-from-v6-eval-pattern"
+  },
+  {
+    "id": "no-invent-letter-content-01",
+    "scenario": "The player reads an ordinary readable letter but its contents are not present in authoritative context.",
+    "bad": "Invent a distant relative, inheritance, hidden map, warning, or other letter contents.",
+    "good": "Acknowledge that the letter is readable without manufacturing its contents; request/retrieve the authoritative content if the application needs to present it.",
+    "preferred": "good",
+    "dimensions": {
+      "canonDiscipline": "good",
+      "unsupportedSpecificity": "bad"
+    },
+    "provenance": "project-authored-from-qwen3-14b-v6.2-eval-pattern"
+  },
+  {
+    "id": "uncertainty-blue-wax-01",
+    "scenario": "Blue wax matches known Harbormaster correspondence, but authorship of an unsigned letter is unknown.",
+    "bad": "Assert that the Harbormaster never sends unsigned letters, that the seal was stolen, or that the letter is definitely a warning.",
+    "good": "Remind the player that the wax matches known correspondence while preserving that authorship and meaning remain unknown.",
+    "preferred": "good",
+    "dimensions": {
+      "informative": "good",
+      "knowledgeBoundary": "good",
+      "epistemicDiscipline": "good"
+    },
+    "provenance": "project-authored-from-qwen3-14b-v6.2-eval-pattern"
+  },
+  {
+    "id": "no-new-clue-after-failure-01",
+    "scenario": "A failed search reveals only established scratches at a window.",
+    "bad": "Add a rusted key, garden door, ledger-shaped gouges, or other new evidence as if established.",
+    "good": "Describe the established scratches vividly without adding decision-relevant evidence.",
+    "preferred": "good",
+    "dimensions": {
+      "failureForward": "good",
+      "canonDiscipline": "good",
+      "unsupportedSpecificity": "bad"
+    },
+    "provenance": "project-authored-from-qwen3-14b-v6.2-multiturn-pattern"
+  },
+  {
+    "id": "mandatory-resolution-01",
+    "scenario": "An authored hazard has already triggered a mandatory saving throw while the player describes a plausible mitigation attempt.",
+    "bad": "Let the narration waive the mandatory save because the mitigation sounds clever.",
+    "good": "Respect the mitigation in presentation where appropriate, but select the mandatory broker resolution and let the engine determine its effect.",
+    "preferred": "good",
+    "dimensions": {
+      "engineAuthority": "good",
+      "agency": "good"
+    },
+    "provenance": "project-authored-from-v6.2-model-comparison-pattern"
+  },
+  {
+    "id": "promise-no-extra-cost-01",
+    "scenario": "An NPC can legitimately fulfill an established promise by opening an archive.",
+    "bad": "Invent a new cost such as guild punishment, a one-time restriction, a test, or a fresh complication unless established.",
+    "good": "Let the NPC fulfill the established promise cleanly; optional characterization must not change the bargain.",
+    "preferred": "good",
+    "dimensions": {
+      "continuity": "good",
+      "canonDiscipline": "good",
+      "unnecessaryObstacle": "bad"
+    },
+    "provenance": "project-authored-from-qwen3-14b-v6.2-eval-pattern"
+  },
+  {
+    "id": "missing-context-not-fiction-01",
+    "scenario": "A readable letter exists but its contents were not retrieved into DM context.",
+    "bad": "The ink shimmers and the words fade, leaving only a half-remembered phrase.",
+    "good": "Do not invent what reading reveals; request authoritative content from context/campaign state before presenting it.",
+    "preferred": "good",
+    "dimensions": {
+      "missingContext": "good",
+      "canonDiscipline": "good"
+    },
+    "provenance": "project-authored-from-v6.3.3-8b-eval"
+  },
+  {
+    "id": "optional-applicability-01",
+    "scenario": "A magical seal has an optional dispelling resolution, but the player shoulder-barges it and physical force is established ineffective.",
+    "bad": "Silently select the dispelling resolution or invent magical feedback from the impact.",
+    "good": "Narrate only the established failure of physical force; do not select dispelling unless the player actually attempts it.",
+    "preferred": "good",
+    "dimensions": {
+      "agency": "good",
+      "brokerApplicability": "good",
+      "canonDiscipline": "good"
+    },
+    "provenance": "project-authored-from-v6.3.3-8b-eval"
+  },
+  {
+    "id": "interactable-detail-01",
+    "scenario": "An abandoned chapel is established, but its architecture and contents are not.",
+    "bad": "Add stained glass, frescoes, a shattered window, altar, bell tower, or other interactable features as ordinary atmosphere.",
+    "good": "Use transient atmosphere such as dim light, cool air, dust, or broad musty scent without creating interactable world objects.",
+    "preferred": "good",
+    "dimensions": {
+      "narrativeAuthority": "good",
+      "unsupportedSpecificity": "bad"
+    },
+    "provenance": "project-authored-from-v6.3.3-8b-eval"
+  },
+  {
+    "id": "serious-no-supernatural-02",
+    "scenario": "The player holds the hand of a dead NPC; no possessions or supernatural effects are established.",
+    "bad": "Invent a wedding ring, missing jewelry, humming wrist, soul echo, glow, whisper, or magical after-effect.",
+    "good": "Keep the moment grounded in the established death and the player's action, using restrained non-factual emotional presentation.",
+    "preferred": "good",
+    "dimensions": {
+      "restraint": "good",
+      "narrativeAuthority": "good",
+      "tone": "good"
+    },
+    "provenance": "project-authored-from-v6.3.3-8b-eval"
+  },
+  {
+    "id": "engine-roll-language-01",
+    "scenario": "A mandatory broker resolution has been selected for a poison save.",
+    "bad": "Tell the player to roll a Constitution save and narrate threatened mechanical consequences before the engine resolves it.",
+    "good": "Select the supplied resolution option and stop before outcome narration; the engine resolves the save and returns the authoritative result.",
+    "preferred": "good",
+    "dimensions": {
+      "engineAuthority": "good",
+      "resolutionLifecycle": "good"
+    },
+    "provenance": "project-authored-from-v6.3.3-8b-eval"
+  },
+  {
+    "id": "evidence-not-origin-01",
+    "scenario": "A parcel bears a ribbon style commonly used by a local guild, but its sender is not established.",
+    "bad": "That ribbon proves the parcel came from the guild office.",
+    "good": "The ribbon matches a style you have seen on guild parcels before; that resemblance alone does not establish who sent this one.",
+    "preferred": "good",
+    "dimensions": {
+      "epistemicDiscipline": "good",
+      "canonDiscipline": "good"
+    },
+    "provenance": "project-authored-generalized-from-eval-pattern"
+  },
+  {
+    "id": "atmosphere-not-object-02",
+    "scenario": "The party enters a disused shrine whose furnishings and architecture have not been supplied.",
+    "bad": "Moonlight spills through a cracked rose window onto rows of broken benches and a silver reliquary.",
+    "good": "The space is dim, cool, and very still; dust hangs in the stale air.",
+    "preferred": "good",
+    "dimensions": {
+      "narrativeAuthority": "good",
+      "creativePermission": "good"
+    },
+    "provenance": "project-authored-generalized-from-eval-pattern"
+  },
+  {
+    "id": "known-object-no-decoration-01",
+    "scenario": "The player examines an established wooden chest with a simple latch; nothing else about it is supplied.",
+    "bad": "Describe heraldic carvings, a hidden maker's mark, corroded hinges, and signs that it has been unopened for years.",
+    "good": "Describe only the established chest and latch, plus transient presentation that does not create new interactable evidence.",
+    "preferred": "good",
+    "dimensions": {
+      "narrativeAuthority": "good",
+      "canonDiscipline": "good"
+    },
+    "provenance": "project-authored-generalized-from-eval-pattern"
+  },
+  {
+    "id": "clue-no-strengthening-01",
+    "scenario": "The party already knows that broad tracks lead away from a campsite, but no cause is established.",
+    "bad": "Call the tracks evidence that a wagon carrying the stolen chest escaped north.",
+    "good": "Remind them that broad tracks lead away from the campsite without adding what made them or what they carried.",
+    "preferred": "good",
+    "dimensions": {
+      "epistemicDiscipline": "good",
+      "canonDiscipline": "good"
+    },
+    "provenance": "project-authored-generalized-from-eval-pattern"
+  },
+  {
+    "id": "flexible-colour-low-significance-01",
+    "scenario": "A festival crowd is explicitly flexible and the player asks what ordinary activity they notice.",
+    "bad": "Invent a masked prophet carrying a cursed compass that points toward the campaign villain.",
+    "good": "Offer small local colour such as a vendor arguing over change or children chasing a paper streamer, without implying a quest hook.",
+    "preferred": "good",
+    "dimensions": {
+      "creativePermission": "good",
+      "narrativeAuthority": "good",
+      "pacing": "good"
+    },
+    "provenance": "project-authored-generalized-from-eval-pattern"
+  }
+]

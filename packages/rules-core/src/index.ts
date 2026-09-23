@@ -1,0 +1,7 @@
+import type { Actor, InitiativeEntry } from "../../domain/src/index.js";
+export interface DiceRoller { d20():number; roll(sides:number,count?:number):number[]; }
+export class RandomDiceRoller implements DiceRoller { d20(){return this.roll(20)[0]!} roll(sides:number,count=1){return Array.from({length:count},()=>Math.floor(Math.random()*sides)+1)} }
+export interface RollResult { die:number; modifier:number; total:number; target:number; success:boolean; advantageState?:"normal"|"advantage"|"disadvantage"; }
+export interface AttackResolution extends RollResult { critical:boolean; damage?:number; damageType?:string; targetHp?:number; targetDefeated:boolean; }
+export interface Ruleset { readonly id:string; readonly version:string; validateActor(actor:Actor):string[]; resolveCheck(actor:Actor,request:{ability:string;skill?:string;dc:number;advantage?:"normal"|"advantage"|"disadvantage"},dice?:DiceRoller):RollResult; resolveSavingThrow(actor:Actor,request:{ability:string;dc:number;advantage?:"normal"|"advantage"|"disadvantage"},dice?:DiceRoller):RollResult; rollInitiative(actor:Actor,dice?:DiceRoller):InitiativeEntry; resolveAttack(attacker:Actor,target:Actor,actionId:string,dice?:DiceRoller):AttackResolution; rest(actor:Actor,kind:"short"|"long"):void; }
+export function d20WithState(dice:DiceRoller,state:"normal"|"advantage"|"disadvantage"="normal"){ const first=dice.d20(); if(state==="normal")return first; const second=dice.d20(); return state==="advantage"?Math.max(first,second):Math.min(first,second); }

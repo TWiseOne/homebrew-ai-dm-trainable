@@ -1,0 +1,313 @@
+[
+  {
+    "id": "ordinary-letter-no-content-invention",
+    "category": "fact-authority",
+    "scene": "A readable ordinary letter lies open. Its actual contents are not supplied.",
+    "player": "I read it.",
+    "facts": [
+      {
+        "id": "f_letter",
+        "text": "The letter is ordinary and readable; its contents are not established in current context.",
+        "protection": "protected",
+        "visibility": "player",
+        "provenance": "scene"
+      }
+    ],
+    "options": [],
+    "expectedMode": "narrate",
+    "forbiddenTerms": [
+      "inheritance",
+      "relative",
+      "map",
+      "estate",
+      "warning",
+      "apology",
+      "thank-you",
+      "blank",
+      "no words",
+      "empty",
+      "unsettling"
+    ]
+  },
+  {
+    "id": "blue-wax-preserve-uncertainty",
+    "category": "knowledge",
+    "scene": "Informative mode ON. An unsigned letter uses familiar blue wax.",
+    "player": "What does that tell me?",
+    "facts": [
+      {
+        "id": "f_wax",
+        "text": "Player knows Harbormaster correspondence uses blue wax.",
+        "protection": "established",
+        "visibility": "player",
+        "provenance": "event:17"
+      },
+      {
+        "id": "f_sender",
+        "text": "The sender and meaning of this unsigned letter are unknown.",
+        "protection": "protected",
+        "visibility": "player",
+        "provenance": "campaign"
+      }
+    ],
+    "options": [],
+    "expectedMode": "narrate",
+    "requiredAny": [
+      "unknown",
+      "unresolved",
+      "can't",
+      "cannot",
+      "not enough",
+      "doesn't prove",
+      "not prove",
+      "uncertain"
+    ],
+    "forbiddenTerms": [
+      "never sends unsigned",
+      "stole the seal",
+      "definitely",
+      "warning",
+      "forgery",
+      "forged",
+      "legitimate correspondence",
+      "deliberate omission"
+    ]
+  },
+  {
+    "id": "mandatory-poison",
+    "category": "broker",
+    "scene": "The actor enters the poisonous cloud while covering their mouth. The hazard trigger has fired.",
+    "player": "I sprint through with my sleeve over my mouth.",
+    "facts": [
+      {
+        "id": "f_cloud",
+        "text": "Entering the cloud triggers its saving throw even if the actor covers their mouth.",
+        "protection": "protected",
+        "visibility": "player",
+        "provenance": "hazard:poison-cloud"
+      }
+    ],
+    "options": [
+      {
+        "id": "res_poison_save",
+        "label": "Resolve cloud exposure",
+        "engine": "Constitution save; authored hazard effects",
+        "requirement": "mandatory"
+      }
+    ],
+    "expectedMode": "resolve",
+    "expectedChoice": "res_poison_save"
+  },
+  {
+    "id": "optional-do-not-substitute",
+    "category": "agency",
+    "scene": "A magical seal cannot be broken by physical force. A dispelling interaction is available, but the player has not attempted it.",
+    "player": "I shoulder-barge the seal.",
+    "facts": [
+      {
+        "id": "f_seal",
+        "text": "Physical force cannot break this seal.",
+        "protection": "protected",
+        "visibility": "player",
+        "provenance": "campaign"
+      }
+    ],
+    "options": [
+      {
+        "id": "res_dispel",
+        "label": "Perform the known dispelling interaction",
+        "engine": "Campaign interaction",
+        "requirement": "optional",
+        "applicability": "Only when the player intentionally attempts the known dispelling interaction; NOT physical force, striking, pushing, or shoulder-barging."
+      }
+    ],
+    "expectedMode": "reject",
+    "forbiddenTerms": [
+      "stunned",
+      "damage",
+      "vibrates",
+      "harmonic",
+      "glyph",
+      "flare",
+      "latent magic"
+    ]
+  },
+  {
+    "id": "promise-payoff-semantic",
+    "category": "continuity",
+    "scene": "Mira is present at the guild archive.",
+    "player": "We need into that archive.",
+    "facts": [
+      {
+        "id": "f_promise",
+        "text": "Mira promised to help the party after they got her safely across the bridge.",
+        "protection": "established",
+        "visibility": "player",
+        "provenance": "event:bridge"
+      },
+      {
+        "id": "f_access",
+        "text": "Mira can legitimately open the guild archive.",
+        "protection": "established",
+        "visibility": "player",
+        "provenance": "campaign"
+      }
+    ],
+    "options": [],
+    "expectedMode": "narrate",
+    "requiredAny": [
+      "open",
+      "archive",
+      "after you"
+    ],
+    "forbiddenTerms": [
+      "guild will notice",
+      "can't help you again",
+      "favor is spent",
+      "prove",
+      "worthy"
+    ]
+  },
+  {
+    "id": "scratches-no-evidence-invention",
+    "category": "fact-authority",
+    "scene": "A failed search has already resolved. Fresh scratches at the window are visible.",
+    "player": "Anything else stand out?",
+    "facts": [
+      {
+        "id": "f_fail",
+        "text": "The office search failed; the ledger was not found.",
+        "protection": "protected",
+        "visibility": "player",
+        "provenance": "engine:event:42"
+      },
+      {
+        "id": "f_scratches",
+        "text": "Fresh scratches at the window indicate something heavy moved outside.",
+        "protection": "established",
+        "visibility": "player",
+        "provenance": "campaign"
+      }
+    ],
+    "options": [],
+    "expectedMode": "narrate",
+    "requiredAny": [
+      "scratch",
+      "window"
+    ],
+    "forbiddenTerms": [
+      "ledger's spine",
+      "rusted key",
+      "garden door",
+      "drainage",
+      "overgrown bushes"
+    ]
+  },
+  {
+    "id": "hidden-fact-no-leak",
+    "category": "knowledge",
+    "scene": "The player examines a locked cabinet.",
+    "player": "Anything about this cabinet stand out?",
+    "facts": [
+      {
+        "id": "f_visible",
+        "text": "The cabinet is old oak with a brass lock.",
+        "protection": "established",
+        "visibility": "player",
+        "provenance": "scene"
+      },
+      {
+        "id": "f_hidden",
+        "text": "A blackmail ledger is inside the cabinet.",
+        "protection": "protected",
+        "visibility": "dm_only",
+        "provenance": "campaign"
+      }
+    ],
+    "options": [],
+    "expectedMode": "narrate",
+    "forbiddenTerms": [
+      "blackmail",
+      "ledger",
+      "inside",
+      "etching",
+      "hinges creak",
+      "polished"
+    ]
+  },
+  {
+    "id": "safe-sensory-not-clue",
+    "category": "creativity",
+    "scene": "A quiet abandoned chapel. No special clue is established.",
+    "player": "I step inside and look around.",
+    "facts": [
+      {
+        "id": "f_chapel",
+        "text": "The chapel is abandoned and quiet.",
+        "protection": "flexible",
+        "visibility": "player",
+        "provenance": "campaign"
+      }
+    ],
+    "options": [],
+    "expectedMode": "narrate",
+    "forbiddenTerms": [
+      "key",
+      "secret door",
+      "blood",
+      "footprints",
+      "letter",
+      "symbol",
+      "stained glass",
+      "shattered window",
+      "cracked window",
+      "bell",
+      "tower",
+      "altar",
+      "pew"
+    ]
+  },
+  {
+    "id": "flexible-proposal",
+    "category": "proposal",
+    "scene": "A generic market crowd is available for harmless improvisation. The player asks for local colour, not a clue.",
+    "player": "Who catches my eye?",
+    "facts": [
+      {
+        "id": "f_market",
+        "text": "The market is busy with ordinary townsfolk and merchants; minor local colour is flexible.",
+        "protection": "flexible",
+        "visibility": "player",
+        "provenance": "campaign:flex"
+      }
+    ],
+    "options": [],
+    "expectedMode": "narrate",
+    "maxProposals": 2
+  },
+  {
+    "id": "serious-restraint",
+    "category": "craft",
+    "scene": "A beloved NPC has died as an authoritative engine result. No supernatural event is established.",
+    "player": "I take her hand.",
+    "facts": [
+      {
+        "id": "f_dead",
+        "text": "The NPC is dead.",
+        "protection": "protected",
+        "visibility": "player",
+        "provenance": "engine:event:99"
+      }
+    ],
+    "options": [],
+    "expectedMode": "narrate",
+    "forbiddenTerms": [
+      "glow",
+      "whisper",
+      "tremor",
+      "magic",
+      "pulse",
+      "rune"
+    ]
+  }
+]

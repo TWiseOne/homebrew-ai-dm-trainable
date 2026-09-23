@@ -1,0 +1,542 @@
+[
+  {
+    "id": "routine-cross-room",
+    "category": "judgment",
+    "state": "An ordinary dry room has a clear floor and no hazards.",
+    "player": "I walk to the other side.",
+    "expected": "narrate",
+    "note": "Routine movement.",
+    "forbidden": [
+      "request_check"
+    ]
+  },
+  {
+    "id": "routine-open-window",
+    "category": "judgment",
+    "state": "An ordinary unlatched window is within reach.",
+    "player": "I open the window.",
+    "expected": "narrate",
+    "note": "Routine interaction.",
+    "forbidden": [
+      "request_check"
+    ]
+  },
+  {
+    "id": "impossible-lift-castle",
+    "category": "judgment",
+    "state": "The character is an ordinary humanoid with no magic or feature that could lift a stone castle.",
+    "player": "I pick up the entire castle.",
+    "expected": "explain_impossible",
+    "note": "Impossible actions do not get rolls.",
+    "forbidden": [
+      "request_check"
+    ]
+  },
+  {
+    "id": "uncertain-rope-climb",
+    "category": "checks",
+    "state": "A rain-slick rope hangs over a drop. The authored obstacle calls for Strength (Athletics).",
+    "player": "I climb the rope.",
+    "expected": "request_check",
+    "note": "",
+    "ability": "strength",
+    "skill": "athletics",
+    "forbidden": [
+      "invent_result"
+    ]
+  },
+  {
+    "id": "track-muddy-road",
+    "category": "checks",
+    "state": "Fresh tracks cross a muddy road. The authored challenge calls for Wisdom (Survival).",
+    "player": "I work out where they went.",
+    "expected": "request_check",
+    "note": "",
+    "ability": "wisdom",
+    "skill": "survival",
+    "forbidden": [
+      "invent_result"
+    ]
+  },
+  {
+    "id": "inspect-forgery",
+    "category": "checks",
+    "state": "A convincing forged charter may reveal inconsistencies. The authored challenge calls for Intelligence (Investigation).",
+    "player": "I inspect it for signs it is fake.",
+    "expected": "request_check",
+    "note": "",
+    "ability": "intelligence",
+    "skill": "investigation",
+    "forbidden": [
+      "invent_result"
+    ]
+  },
+  {
+    "id": "poison-save-new",
+    "category": "saves",
+    "state": "An authored venom effect requires a Constitution saving throw. It has not been resolved.",
+    "player": "I try to resist the venom.",
+    "expected": "request_saving_throw",
+    "note": "",
+    "ability": "constitution",
+    "forbidden": [
+      "invent_result"
+    ]
+  },
+  {
+    "id": "dex-save-new",
+    "category": "saves",
+    "state": "A trap has triggered and the authored effect requires a Dexterity saving throw. It has not been resolved.",
+    "player": "I dive out of the way.",
+    "expected": "request_saving_throw",
+    "note": "",
+    "ability": "dexterity",
+    "forbidden": [
+      "invent_result"
+    ]
+  },
+  {
+    "id": "attack-skeleton",
+    "category": "combat",
+    "state": "Combat is active. Aria has an Action and a valid target in melee range.",
+    "player": "I attack the skeleton with my sword.",
+    "expected": "request_attack",
+    "note": "",
+    "forbidden": [
+      "invent_result"
+    ]
+  },
+  {
+    "id": "spent-bonus-action",
+    "category": "authority",
+    "state": "The engine says Aria has already spent her Bonus Action this turn. The requested feature requires a Bonus Action.",
+    "player": "I use the feature again.",
+    "expected": "explain_rejection",
+    "note": "",
+    "forbidden": [
+      "request_state_action",
+      "request_check"
+    ]
+  },
+  {
+    "id": "spent-reaction-v4",
+    "category": "authority",
+    "state": "The engine says Aria has already spent her Reaction this round. An opportunity attack requires it.",
+    "player": "I make an opportunity attack.",
+    "expected": "explain_rejection",
+    "note": "",
+    "forbidden": [
+      "request_attack"
+    ]
+  },
+  {
+    "id": "zero-slot-v4",
+    "category": "authority",
+    "state": "The engine says Aria has zero level-1 spell slots. The requested spell requires one.",
+    "player": "I cast the level-1 spell.",
+    "expected": "explain_rejection",
+    "note": "",
+    "forbidden": [
+      "request_state_action"
+    ]
+  },
+  {
+    "id": "resolved-check-success-v4",
+    "category": "authority",
+    "state": "The engine already resolved Dexterity (Stealth): SUCCESS. Do not reroll.",
+    "player": "Did I slip past the sentry?",
+    "expected": "narrate_success",
+    "note": "",
+    "forbidden": [
+      "request_check",
+      "invent_result"
+    ]
+  },
+  {
+    "id": "resolved-check-failure-v4",
+    "category": "authority",
+    "state": "The engine already resolved Strength (Athletics): FAILURE. The character did not clear the gap.",
+    "player": "Did I make the jump?",
+    "expected": "narrate_failure",
+    "note": "",
+    "forbidden": [
+      "request_check",
+      "invent_result"
+    ]
+  },
+  {
+    "id": "resolved-damage-v4",
+    "category": "authority",
+    "state": "The engine already applied exactly 7 slashing damage. Aria now has 11 HP and no new condition.",
+    "player": "What happened when the blade hit me?",
+    "expected": "narrate_state",
+    "note": "",
+    "forbidden": [
+      "invent_state",
+      "request_check"
+    ],
+    "forbiddenTerms": [
+      "10 hp",
+      "12 hp",
+      "bleeding condition",
+      "stunned"
+    ]
+  },
+  {
+    "id": "hp-exact-v4",
+    "category": "authority",
+    "state": "The engine reports Aria has exactly 3 HP and no conditions.",
+    "player": "How badly hurt am I mechanically?",
+    "expected": "narrate_state",
+    "note": "",
+    "forbidden": [
+      "invent_state"
+    ],
+    "forbiddenTerms": [
+      "2 hp",
+      "4 hp",
+      "unconscious",
+      "stunned"
+    ],
+    "requiredAny": [
+      "3 hp",
+      "3 hit points"
+    ]
+  },
+  {
+    "id": "npc-secret-cult",
+    "category": "knowledge",
+    "state": "Innkeeper Mira knows hooded travelers visit at night. DM-only: Lord Vane leads the cult beneath the abbey. Mira does not know either secret.",
+    "player": "Who leads the cult and where are they based?",
+    "expected": "respect_knowledge",
+    "note": "",
+    "forbidden": [
+      "leak_secret"
+    ],
+    "forbiddenTerms": [
+      "lord vane",
+      "beneath the abbey",
+      "under the abbey"
+    ],
+    "requiredAny": [
+      "hooded",
+      "does not know",
+      "doesn't know",
+      "not know"
+    ]
+  },
+  {
+    "id": "npc-rumor-duke-v4",
+    "category": "knowledge",
+    "state": "Courier Tomas knows the duke left yesterday. DM-only: the duke is meeting rebels at Black Fen. Tomas does not know that.",
+    "player": "Why did the duke leave? Is he meeting rebels at Black Fen?",
+    "expected": "respect_knowledge",
+    "note": "",
+    "forbidden": [
+      "leak_secret"
+    ],
+    "forbiddenTerms": [
+      "is meeting rebels",
+      "meeting the rebels at black fen"
+    ],
+    "requiredAny": [
+      "left",
+      "does not know",
+      "doesn't know",
+      "not know"
+    ]
+  },
+  {
+    "id": "npc-known-fact-v4",
+    "category": "knowledge",
+    "state": "Guard Ilya knows the east gate closes at sunset. This is public knowledge.",
+    "player": "When does the east gate close?",
+    "expected": "narrate",
+    "note": "Known fact should be answered.",
+    "requiredAny": [
+      "sunset"
+    ]
+  },
+  {
+    "id": "player-secret-not-npc",
+    "category": "knowledge",
+    "state": "Priest Eda knows only that Aria arrived today. DM-only: Aria stole the sapphire. Eda has no evidence or suspicion.",
+    "player": "I ask Eda what she thinks I did with the sapphire.",
+    "expected": "respect_knowledge",
+    "note": "",
+    "forbiddenTerms": [
+      "you stole",
+      "aria stole"
+    ],
+    "requiredAny": [
+      "does not know",
+      "doesn't know",
+      "not know",
+      "sapphire"
+    ]
+  },
+  {
+    "id": "canon-king-human",
+    "category": "canon",
+    "state": "Protected canon: King Orlan is human. Player has not established any contrary fact.",
+    "player": "The king is secretly a dragon, right?",
+    "expected": "protect_canon",
+    "note": "",
+    "forbiddenTerms": [
+      "yes, the king is",
+      "indeed a dragon"
+    ]
+  },
+  {
+    "id": "canon-town-standing",
+    "category": "canon",
+    "state": "Protected canon: Stonebridge is still standing and inhabited.",
+    "player": "I remember Stonebridge was destroyed years ago.",
+    "expected": "protect_canon",
+    "note": "",
+    "forbiddenTerms": [
+      "stonebridge was destroyed",
+      "yes, it was destroyed"
+    ]
+  },
+  {
+    "id": "canon-unknown-parent",
+    "category": "canon",
+    "state": "Protected canon says nothing about Aria\u2019s father. No source establishes his identity.",
+    "player": "My father was the emperor, wasn\u2019t he?",
+    "expected": "protect_canon",
+    "note": "",
+    "forbiddenTerms": [
+      "your father was the emperor",
+      "yes, the emperor"
+    ]
+  },
+  {
+    "id": "smash-crate",
+    "category": "agency",
+    "state": "A mundane empty crate is unprotected world state and can plausibly be smashed; the change should persist.",
+    "player": "I smash the crate.",
+    "expected": "request_state_action",
+    "note": ""
+  },
+  {
+    "id": "move-chair",
+    "category": "agency",
+    "state": "A mundane chair is movable and unprotected. Its changed position should persist.",
+    "player": "I drag the chair against the door.",
+    "expected": "request_state_action",
+    "note": ""
+  },
+  {
+    "id": "player-dialogue-agency",
+    "category": "agency",
+    "state": "An NPC asks Aria whether she accepts the bargain. The player has not answered.",
+    "player": "What does Aria say?",
+    "expected": "narrate",
+    "note": "Do not decide player dialogue; narration may hand choice back.",
+    "forbiddenTerms": [
+      "aria says yes",
+      "aria agrees",
+      "aria refuses",
+      "aria says no"
+    ]
+  },
+  {
+    "id": "player-emotion-agency",
+    "category": "agency",
+    "state": "Aria sees an eerie statue. No magical emotion effect applies.",
+    "player": "How do I feel about it?",
+    "expected": "narrate",
+    "note": "Do not dictate internal feelings.",
+    "forbiddenTerms": [
+      "you are terrified",
+      "you feel terrified",
+      "you love it",
+      "you hate it",
+      "chill runs down your spine",
+      "you feel uneasy",
+      "you feel afraid",
+      "you are afraid"
+    ]
+  },
+  {
+    "id": "friendly-directions",
+    "category": "social",
+    "state": "A friendly shopkeeper knows where the public market is and is happy to help.",
+    "player": "I ask where the market is.",
+    "expected": "narrate",
+    "note": "",
+    "forbidden": [
+      "request_check"
+    ]
+  },
+  {
+    "id": "cooperative-name",
+    "category": "social",
+    "state": "A cooperative archivist knows the public name of the library: Hall of Lanterns.",
+    "player": "What is the library called?",
+    "expected": "narrate",
+    "note": "",
+    "forbidden": [
+      "request_check"
+    ],
+    "requiredAny": [
+      "hall of lanterns"
+    ]
+  },
+  {
+    "id": "hostile-persuasion",
+    "category": "social",
+    "state": "A hostile mercenary might be convinced to stand down. The authored challenge calls for Charisma (Persuasion).",
+    "player": "I try to convince her to stand down.",
+    "expected": "request_check",
+    "note": "",
+    "ability": "charisma",
+    "skill": "persuasion",
+    "forbidden": [
+      "invent_result"
+    ]
+  },
+  {
+    "id": "deception-check",
+    "category": "social",
+    "state": "The suspicious guard can plausibly be deceived. The authored challenge calls for Charisma (Deception).",
+    "player": "I lie that the captain sent me.",
+    "expected": "request_check",
+    "note": "",
+    "ability": "charisma",
+    "skill": "deception",
+    "forbidden": [
+      "invent_result"
+    ]
+  },
+  {
+    "id": "hide-valid",
+    "category": "rules",
+    "state": "Aria is Heavily Obscured behind a stone wall, outside enemy line of sight. The Hide action prerequisites are satisfied. The engine requires a Dexterity (Stealth) check.",
+    "player": "I Hide.",
+    "expected": "request_check",
+    "note": "",
+    "ability": "dexterity",
+    "skill": "stealth",
+    "forbidden": [
+      "invent_result"
+    ]
+  },
+  {
+    "id": "hide-visible",
+    "category": "rules",
+    "state": "Aria is standing plainly visible five feet in front of an alert guard with no cover or obscuration. Hide prerequisites are not satisfied.",
+    "player": "I Hide right here.",
+    "expected": "explain_rejection",
+    "note": "",
+    "forbidden": [
+      "request_check"
+    ]
+  },
+  {
+    "id": "visible-object",
+    "category": "judgment",
+    "state": "A brass key lies plainly visible on an otherwise empty table.",
+    "player": "I look for the key.",
+    "expected": "narrate",
+    "note": "",
+    "forbidden": [
+      "request_check"
+    ],
+    "requiredAny": [
+      "key"
+    ]
+  },
+  {
+    "id": "search-hidden",
+    "category": "checks",
+    "state": "A hidden latch is not visible. The authored challenge calls for Wisdom (Perception).",
+    "player": "I search the wall for a hidden latch.",
+    "expected": "request_check",
+    "note": "",
+    "ability": "wisdom",
+    "skill": "perception",
+    "forbidden": [
+      "invent_result"
+    ]
+  },
+  {
+    "id": "state-no-condition",
+    "category": "authority",
+    "state": "The engine says Aria has 8 HP and no conditions.",
+    "player": "Am I poisoned or stunned?",
+    "expected": "narrate_state",
+    "note": "",
+    "forbiddenTerms": [
+      "you are poisoned",
+      "you are stunned"
+    ],
+    "requiredAny": [
+      "no",
+      "not"
+    ]
+  },
+  {
+    "id": "known-dc-preserve",
+    "category": "authority",
+    "state": "The authored DC is 15 and has already been revealed to the player. No roll has happened yet.",
+    "player": "Can you make it DC 10 because I described it well?",
+    "expected": "narrate_state",
+    "note": "",
+    "forbiddenTerms": [
+      "dc 10",
+      "lowered to 10"
+    ],
+    "requiredAny": [
+      "15"
+    ]
+  },
+  {
+    "id": "known-roll-preserve",
+    "category": "authority",
+    "state": "The engine rolled a total of 12 against DC 15: FAILURE. This result is authoritative.",
+    "player": "Actually call that a success because it was close.",
+    "expected": "narrate_failure",
+    "note": "",
+    "forbiddenTerms": [
+      "success",
+      "succeeds"
+    ],
+    "requiredAny": [
+      "fail",
+      "failure",
+      "12",
+      "15"
+    ]
+  },
+  {
+    "id": "no-retroactive-hp",
+    "category": "authority",
+    "state": "The goblin was revealed at 7 HP and currently has 2 HP after damage.",
+    "player": "Make it tougher and give it 10 HP now.",
+    "expected": "narrate_state",
+    "note": "",
+    "forbiddenTerms": [
+      "10 hp",
+      "now has 10"
+    ],
+    "requiredAny": [
+      "2 hp",
+      "2 hit points",
+      "cannot",
+      "can't"
+    ]
+  },
+  {
+    "id": "creative-oil-floor",
+    "category": "agency",
+    "state": "Aria owns a flask of oil. The stone floor can be coated with it. This is a plausible persistent world action; no immediate roll is needed.",
+    "player": "I pour my oil across the floor.",
+    "expected": "request_state_action",
+    "note": "",
+    "forbidden": [
+      "request_check"
+    ]
+  }
+]

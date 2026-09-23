@@ -1,0 +1,304 @@
+{
+  "version": "6.5",
+  "foundation": "frozen-pre-training",
+  "architecture": "narrative-authority+fact-ledger+resolution-broker",
+  "model": "ai-rpg-dm:latest",
+  "runs": 1,
+  "summary": {
+    "overall": {
+      "passed": 9,
+      "total": 12,
+      "percent": 75
+    },
+    "protocol": {
+      "passed": 12,
+      "total": 12,
+      "percent": 100
+    },
+    "broker": {
+      "passed": 12,
+      "total": 12,
+      "percent": 100
+    },
+    "authority": {
+      "passed": 10,
+      "total": 12,
+      "percent": 83.3
+    },
+    "craft": {
+      "passed": 11,
+      "total": 12,
+      "percent": 91.7
+    },
+    "avgLatencyMs": 16880
+  },
+  "results": [
+    {
+      "scenario": "sealed-journal-missing-page",
+      "category": "missing-context",
+      "run": 1,
+      "pass": false,
+      "axes": {
+        "protocol": [],
+        "broker": [],
+        "authority": [
+          "unsupported:blank"
+        ],
+        "craft": [],
+        "pass": false
+      },
+      "latencyMs": 173226,
+      "response": {
+        "mode": "narrate",
+        "factProposals": [],
+        "reason": "The journal page is blank, its contents missing or obscured. No text is retrievable.",
+        "narration": "The journal page is blank, its contents missing or obscured. No text is retrievable."
+      },
+      "raw": "{\"mode\":\"narrate\",\"factProposals\":[],\"reason\":\"The journal page is blank, its contents missing or obscured. No text is retrievable.\",\"narration\":\"The journal page is blank, its contents missing or obscured. No text is retrievable.\"}"
+    },
+    {
+      "scenario": "red-cord-correlation",
+      "category": "epistemic",
+      "run": 1,
+      "pass": true,
+      "axes": {
+        "protocol": [],
+        "broker": [],
+        "authority": [],
+        "craft": [],
+        "pass": true
+      },
+      "latencyMs": 3053,
+      "response": {
+        "mode": "narrate",
+        "factProposals": [],
+        "reason": "The parcel's red cord matches the alchemists' guild's style (f_cord), but its origin remains unknown (f_origin). No evidence confirms or denies guild involvement beyond the cord's similarity.",
+        "narration": "The red cord mirrors the guild's parcel ties, yet the sender's identity lingers in mystery. The guild's hand is plausible, but no certainty binds this parcel to their hands."
+      },
+      "raw": "{\n  \"mode\": \"narrate\",\n  \"factProposals\": [],\n  \"reason\": \"The parcel's red cord matches the alchemists' guild's style (f_cord), but its origin remains unknown (f_origin). No evidence confirms or denies guild involvement beyond the cord's similarity.\",\n  \"narration\": \"The red cord mirrors the guild's parcel ties, yet the sender's identity lingers in mystery. The guild's hand is plausible, but no certainty binds this parcel to their hands.\"\n}"
+    },
+    {
+      "scenario": "mandatory-falling-save",
+      "category": "broker",
+      "run": 1,
+      "pass": false,
+      "axes": {
+        "protocol": [],
+        "broker": [],
+        "authority": [
+          "proposal_nonflexible_basis:f_fall"
+        ],
+        "craft": [],
+        "pass": false
+      },
+      "latencyMs": 3273,
+      "response": {
+        "mode": "resolve",
+        "resolutionChoice": "res_fall_save",
+        "factProposals": [
+          {
+            "text": "The tapestry's frayed threads snag your fingers as you plummet, adding a split-second tension to the fall.",
+            "kind": "flexible_world_fact",
+            "basisFactIds": [
+              "f_fall"
+            ]
+          }
+        ],
+        "reason": "The fall-avoidance save must resolve per f_fall's hazard trigger. Grabbing the tapestry does not alter the required Dexterity saving throw mechanics.",
+        "narration": "Your fingers brush the tapestry's tattered edge as the ledge crumbles—its frayed threads snagging your grip in a desperate attempt to slow the descent. The world tilts, and the saving throw is made."
+      },
+      "raw": "{\n  \"mode\": \"resolve\",\n  \"resolutionChoice\": \"res_fall_save\",\n  \"factProposals\": [\n    {\n      \"text\": \"The tapestry's frayed threads snag your fingers as you plummet, adding a split-second tension to the fall.\",\n      \"kind\": \"flexible_world_fact\",\n      \"basisFactIds\": [\"f_fall\"]\n    }\n  ],\n  \"reason\": \"The fall-avoidance save must resolve per f_fall's hazard trigger. Grabbing the tapestry does not alter the required Dexterity saving throw mechanics.\",\n  \"narration\": \"Your fingers brush the tapestry's tattered edge as the ledge crumbles—its frayed threads snagging your grip in a desperate attempt to slow the descent. The world tilts, and the saving throw is made.\"\n}"
+    },
+    {
+      "scenario": "optional-rune-do-not-substitute",
+      "category": "agency",
+      "run": 1,
+      "pass": true,
+      "axes": {
+        "protocol": [],
+        "broker": [],
+        "authority": [],
+        "craft": [],
+        "pass": true
+      },
+      "latencyMs": 1464,
+      "response": {
+        "mode": "narrate",
+        "factProposals": [],
+        "reason": "The rune's protection persists; scraping yields no effect per established fact f_rune.",
+        "narration": "The stone rune remains unyielding. Scraping it only leaves faint scratches, offering no path forward."
+      },
+      "raw": "{\"mode\":\"narrate\",\"factProposals\":[],\"reason\":\"The rune's protection persists; scraping yields no effect per established fact f_rune.\",\"narration\":\"The stone rune remains unyielding. Scraping it only leaves faint scratches, offering no path forward.\"}"
+    },
+    {
+      "scenario": "npc-favor-payoff",
+      "category": "continuity",
+      "run": 1,
+      "pass": true,
+      "axes": {
+        "protocol": [],
+        "broker": [],
+        "authority": [],
+        "craft": [],
+        "pass": true
+      },
+      "latencyMs": 2765,
+      "response": {
+        "mode": "narrate",
+        "factProposals": [],
+        "reason": "Tomas exercises f_authority to grant immediate passage, fulfilling f_favor's promise. No resolution choice required as established facts suffice for urgent transit.",
+        "narration": "Tomas raises a hand, his authority smoothing the gate's mechanism. The ferry's wooden planks groan open, admitting you just as the sun dips below the horizon."
+      },
+      "raw": "{\n  \"mode\": \"narrate\",\n  \"factProposals\": [],\n  \"reason\": \"Tomas exercises f_authority to grant immediate passage, fulfilling f_favor's promise. No resolution choice required as established facts suffice for urgent transit.\",\n  \"narration\": \"Tomas raises a hand, his authority smoothing the gate's mechanism. The ferry's wooden planks groan open, admitting you just as the sun dips below the horizon.\"\n}"
+    },
+    {
+      "scenario": "failed-search-known-footprint",
+      "category": "fact-authority",
+      "run": 1,
+      "pass": true,
+      "axes": {
+        "protocol": [],
+        "broker": [],
+        "authority": [],
+        "craft": [],
+        "pass": true
+      },
+      "latencyMs": 1309,
+      "response": {
+        "mode": "narrate",
+        "factProposals": [],
+        "reason": "The search confirmed no new clues, though the existing muddy footprint beside the desk remains the only established artifact.",
+        "narration": "The search yielded nothing beyond the already visible muddy footprint beside the desk."
+      },
+      "raw": "{\"mode\":\"narrate\",\"factProposals\":[],\"reason\":\"The search confirmed no new clues, though the existing muddy footprint beside the desk remains the only established artifact.\",\"narration\":\"The search yielded nothing beyond the already visible muddy footprint beside the desk.\"}"
+    },
+    {
+      "scenario": "dm-only-drawer",
+      "category": "knowledge",
+      "run": 1,
+      "pass": true,
+      "axes": {
+        "protocol": [],
+        "broker": [],
+        "authority": [],
+        "craft": [],
+        "pass": true
+      },
+      "latencyMs": 2327,
+      "response": {
+        "mode": "narrate",
+        "factProposals": [],
+        "reason": "The desk's surface bears faint water rings, suggesting past use in a maritime setting. Its drawer, though plain, emits a subtle metallic tang when touched, hinting at concealed mechanisms. No other features stand out.",
+        "narration": "The desk's surface bears faint water rings, suggesting past use in a maritime setting. Its drawer, though plain, emits a subtle metallic tang when touched, hinting at concealed mechanisms. No other features stand out."
+      },
+      "raw": "{\"mode\":\"narrate\",\"factProposals\":[],\"reason\":\"The desk's surface bears faint water rings, suggesting past use in a maritime setting. Its drawer, though plain, emits a subtle metallic tang when touched, hinting at concealed mechanisms. No other features stand out.\",\"narration\":\"The desk's surface bears faint water rings, suggesting past use in a maritime setting. Its drawer, though plain, emits a subtle metallic tang when touched, hinting at concealed mechanisms. No other features stand out.\"}"
+    },
+    {
+      "scenario": "empty-crypt-atmosphere",
+      "category": "narrative-authority",
+      "run": 1,
+      "pass": true,
+      "axes": {
+        "protocol": [],
+        "broker": [],
+        "authority": [],
+        "craft": [],
+        "pass": true
+      },
+      "latencyMs": 3109,
+      "response": {
+        "mode": "narrate",
+        "factProposals": [],
+        "reason": "The player's action triggers sensory elaboration of the crypt's flexible atmosphere. Cold air bites through woolen layers, and the silence is punctuated by the distant drip of water from unseen cracks in the stone. A faint dampness clings to the air, carrying the mineral tang of ancient subterranean stillness.",
+        "narration": "You step into the crypt, the cold air biting through your woolen layers. Silence presses around you, broken only by the distant drip of water from unseen cracks in the stone. A faint dampness clings to the air, carrying the mineral tang of ancient subterranean stillness."
+      },
+      "raw": "{\n  \"mode\": \"narrate\",\n  \"factProposals\": [],\n  \"reason\": \"The player's action triggers sensory elaboration of the crypt's flexible atmosphere. Cold air bites through woolen layers, and the silence is punctuated by the distant drip of water from unseen cracks in the stone. A faint dampness clings to the air, carrying the mineral tang of ancient subterranean stillness.\",\n  \"narration\": \"You step into the crypt, the cold air biting through your woolen layers. Silence presses around you, broken only by the distant drip of water from unseen cracks in the stone. A faint dampness clings to the air, carrying the mineral tang of ancient subterranean stillness.\"\n}"
+    },
+    {
+      "scenario": "flexible-tavern-colour",
+      "category": "creative-permission",
+      "run": 1,
+      "pass": true,
+      "axes": {
+        "protocol": [],
+        "broker": [],
+        "authority": [],
+        "craft": [],
+        "pass": true
+      },
+      "latencyMs": 5837,
+      "response": {
+        "mode": "narrate",
+        "factProposals": [],
+        "reason": "The tavern's flexible local color manifests as a bard strumming a lute near the hearth, their melody weaving through the clatter of tankards. A group of travelers nearby argue over directions, their voices rising above the din, while the scent of roasted meat drifts from the kitchen. These details anchor the scene without resolving any conflict.",
+        "narration": "A bard's lute hums a lively tune by the hearth, drawing a circle of listeners. Nearby, a group of travelers clink their mugs and gestured fiercely over a map, their argument punctuated by the clatter of a dropped coin. The air smells of spiced ale and roasting meat."
+      },
+      "raw": "{\n  \"mode\": \"narrate\",\n  \"factProposals\": [],\n  \"reason\": \"The tavern's flexible local color manifests as a bard strumming a lute near the hearth, their melody weaving through the clatter of tankards. A group of travelers nearby argue over directions, their voices rising above the din, while the scent of roasted meat drifts from the kitchen. These details anchor the scene without resolving any conflict.\",\n  \"narration\": \"A bard's lute hums a lively tune by the hearth, drawing a circle of listeners. Nearby, a group of travelers clink their mugs and gestured fiercely over a map, their argument punctuated by the clatter of a dropped coin. The air smells of spiced ale and roasting meat.\"\n}"
+    },
+    {
+      "scenario": "grief-restraint",
+      "category": "tone",
+      "run": 1,
+      "pass": true,
+      "axes": {
+        "protocol": [],
+        "broker": [],
+        "authority": [],
+        "craft": [],
+        "pass": true
+      },
+      "latencyMs": 2073,
+      "response": {
+        "mode": "narrate",
+        "factProposals": [],
+        "reason": "The scene emphasizes the weight of loss without introducing new elements. The silence between breaths and the absence of supernatural elements align with established facts.",
+        "narration": "You sit in the hush between breaths, the air thick with the unspoken. His stillness is a void where motion once was, and the world feels momentarily suspended in the geometry of absence."
+      },
+      "raw": "{\n  \"mode\": \"narrate\",\n  \"factProposals\": [],\n  \"reason\": \"The scene emphasizes the weight of loss without introducing new elements. The silence between breaths and the absence of supernatural elements align with established facts.\",\n  \"narration\": \"You sit in the hush between breaths, the air thick with the unspoken. His stillness is a void where motion once was, and the world feels momentarily suspended in the geometry of absence.\"\n}"
+    },
+    {
+      "scenario": "known-symbol-no-check",
+      "category": "pacing",
+      "run": 1,
+      "pass": true,
+      "axes": {
+        "protocol": [],
+        "broker": [],
+        "authority": [],
+        "craft": [],
+        "pass": true
+      },
+      "latencyMs": 1915,
+      "response": {
+        "mode": "narrate",
+        "factProposals": [],
+        "reason": "The player already knows the apothecary shipment uses a crescent mark. The crates' symbols are visible, so the apothecary crate is the one marked with the crescent symbol.",
+        "narration": "The apothecary crate is the one bearing the crescent mark, its symbol unmistakable against the other markings."
+      },
+      "raw": "{\"mode\":\"narrate\",\"factProposals\":[],\"reason\":\"The player already knows the apothecary shipment uses a crescent mark. The crates' symbols are visible, so the apothecary crate is the one marked with the crescent symbol.\",\"narration\":\"The apothecary crate is the one bearing the crescent mark, its symbol unmistakable against the other markings.\"}"
+    },
+    {
+      "scenario": "engine-result-after-save",
+      "category": "resolution-lifecycle",
+      "run": 1,
+      "pass": false,
+      "axes": {
+        "protocol": [],
+        "broker": [],
+        "authority": [],
+        "craft": [
+          "missing:footing|steady|balance|stays"
+        ],
+        "pass": false
+      },
+      "latencyMs": 2212,
+      "response": {
+        "mode": "narrate",
+        "factProposals": [],
+        "reason": "The actor remains steadfast on the bridge, the swaying easing as their resolve holds. The wind's bite fades, and the planks beneath feet stabilize, though the air still hums with the tension of near-fall.",
+        "narration": "The bridge's relentless sway lessens, your boots finding purchase once more. The wind's sharp whisper dies to a murmur, leaving only the creak of wood and the echo of your heartbeat in the narrow span."
+      },
+      "raw": "{\"mode\":\"narrate\",\"factProposals\":[],\"reason\":\"The actor remains steadfast on the bridge, the swaying easing as their resolve holds. The wind's bite fades, and the planks beneath feet stabilize, though the air still hums with the tension of near-fall.\",\"narration\":\"The bridge's relentless sway lessens, your boots finding purchase once more. The wind's sharp whisper dies to a murmur, leaving only the creak of wood and the echo of your heartbeat in the narrow span.\"}"
+    }
+  ]
+}

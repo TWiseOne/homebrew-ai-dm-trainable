@@ -1,0 +1,7 @@
+# Install in a dedicated training venv after choosing the CUDA/PyTorch build for the host.
+transformers>=4.51,<5
+accelerate>=1.2
+peft>=0.14
+trl>=0.15
+bitsandbytes>=0.45
+safetensors>=0.4

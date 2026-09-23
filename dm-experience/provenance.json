@@ -1,0 +1,18 @@
+{
+  "version": 1,
+  "createdFor": "DM Lab V3",
+  "entries": [
+    {
+      "path": "principles/core.json",
+      "origin": "project-authored",
+      "basis": "AI RPG architecture decisions and failure patterns observed in DM Lab V1/V2",
+      "redistribution": "project-owned"
+    },
+    {
+      "path": "preference-pairs/core.json",
+      "origin": "project-authored",
+      "basis": "new analogous examples written for V3; not copied from third-party adventures, books, transcripts, or videos",
+      "redistribution": "project-owned"
+    }
+  ]
+}

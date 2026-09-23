@@ -1,0 +1,257 @@
+{
+  "version": "1.3",
+  "sourcePool": {
+    "dnd_dm_v3": 1633,
+    "srd_anchor_pairs": 11267,
+    "total": 12900
+  },
+  "reviewQueues": {
+    "dnd_dm_v3": 1633,
+    "srdScenarioSeeds": 1400
+  },
+  "srdCoverage": {
+    "other": 835,
+    "combat": 2665,
+    "creatures": 1112,
+    "spellcasting": 3237,
+    "social": 24,
+    "conditions": 674,
+    "movement": 521,
+    "saving_throws": 206,
+    "exploration": 292,
+    "classes_features": 687,
+    "checks": 511,
+    "equipment": 380,
+    "death": 54,
+    "rest_resources": 54,
+    "concentration": 15
+  },
+  "topActualForeignToolCalls": [
+    [
+      "check_resist",
+      2518
+    ],
+    [
+      "check_buffs",
+      2386
+    ],
+    [
+      "reset_resources",
+      2372
+    ],
+    [
+      "reset_speed",
+      2370
+    ],
+    [
+      "check_concentration",
+      2368
+    ],
+    [
+      "check_valid_attack_line",
+      1988
+    ],
+    [
+      "check_ac",
+      1726
+    ],
+    [
+      "get_player_pos",
+      1718
+    ],
+    [
+      "roll_attack",
+      1658
+    ],
+    [
+      "move",
+      1452
+    ],
+    [
+      "get_monster_pos",
+      1326
+    ],
+    [
+      "update_hp",
+      986
+    ],
+    [
+      "roll_dmg",
+      930
+    ],
+    [
+      "check_resources",
+      926
+    ],
+    [
+      "check_monster_actions",
+      754
+    ],
+    [
+      "remove_a_concentration",
+      418
+    ],
+    [
+      "check_hp",
+      348
+    ],
+    [
+      "roll_save",
+      314
+    ],
+    [
+      "check_side",
+      270
+    ],
+    [
+      "roll_initiative",
+      216
+    ],
+    [
+      "roll_spell_attack",
+      204
+    ],
+    [
+      "check_player_mainhand",
+      166
+    ],
+    [
+      "roll_dice",
+      110
+    ],
+    [
+      "dash",
+      88
+    ],
+    [
+      "check_class",
+      78
+    ],
+    [
+      "disengage",
+      42
+    ],
+    [
+      "opportunity_attack",
+      32
+    ],
+    [
+      "remove_a_buff",
+      20
+    ],
+    [
+      "stand_up",
+      14
+    ],
+    [
+      "check_player_armor",
+      10
+    ],
+    [
+      "add_resist",
+      6
+    ],
+    [
+      "roll_skill_check",
+      4
+    ],
+    [
+      "print_death_point",
+      2
+    ],
+    [
+      "check_player_property",
+      1
+    ]
+  ],
+  "topAvailableForeignTools": [
+    [
+      "add_immune",
+      1633
+    ],
+    [
+      "add_resist",
+      1633
+    ],
+    [
+      "add_temp_hp",
+      1633
+    ],
+    [
+      "add_vulner",
+      1633
+    ],
+    [
+      "check_ac",
+      1633
+    ],
+    [
+      "check_buffs",
+      1633
+    ],
+    [
+      "check_class",
+      1633
+    ],
+    [
+      "check_concentration",
+      1633
+    ],
+    [
+      "check_hp",
+      1633
+    ],
+    [
+      "check_monster_actions",
+      1633
+    ],
+    [
+      "check_monster_type",
+      1633
+    ],
+    [
+      "check_player_armor",
+      1633
+    ],
+    [
+      "check_player_mainhand",
+      1633
+    ],
+    [
+      "check_resist",
+      1633
+    ],
+    [
+      "check_resources",
+      1633
+    ],
+    [
+      "check_side",
+      1633
+    ],
+    [
+      "check_valid_attack_line",
+      1633
+    ],
+    [
+      "clear_speed",
+      1633
+    ],
+    [
+      "dash",
+      1633
+    ],
+    [
+      "disengage",
+      1633
+    ]
+  ],
+  "automaticGoldExamples": 0,
+  "gates": [
+    "provenance_required",
+    "no_eval_source",
+    "foreign_tool_api_must_be_transformed",
+    "rules_passage_not_dm_prose",
+    "explicit_review_before_gold"
+  ]
+}

@@ -1,0 +1,22 @@
+{
+  "datasetVersion": "training-v1",
+  "seed": 6501,
+  "source": "training/datasets/source/preferences-v1.json",
+  "sourceSha256": "f24de4288c4c18c67419544d55ff599ce9b94debb964ae351b9b8ee7ec36c8ff",
+  "total": 21,
+  "train": 17,
+  "validation": 4,
+  "validationIds": [
+    "engine-roll-language-01",
+    "informative-01",
+    "no-roll-known-clue-01",
+    "uncertainty-blue-wax-01"
+  ],
+  "benchmarkExcluded": true,
+  "files": {
+    "sft-train.jsonl": "456f6b93e166476f8b930e3a025d4bf216c7ffb95c54be21309484a97067ec8a",
+    "sft-validation.jsonl": "6559449b9dbba6006749a9d08cc1ac17ffb2289475095073f36d57cc6721349e",
+    "preference-train.jsonl": "f0c69c23fbc24b8eadead4cf78e495cd784c43b3098f2a6a1e9fb4da14f8339f",
+    "preference-validation.jsonl": "94b1c6662da8739893a8a15acf4ba938935f6d2a43ff14628e94f122306360e4"
+  }
+}
