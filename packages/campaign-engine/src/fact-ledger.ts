@@ -1,8 +1,5 @@
-export type FactSource="authored_canon"|"engine_result"|"player_action"|"dm_improvisation";
-export type FactVisibility="player"|"dm_only"|`actor:${string}`;
-export type FactProtection="protected"|"established"|"flexible";
-export type FactConfidence="explicit"|"inferred";
-export interface FactRecord { id:string; subject:string; predicate:string; value:string; source:FactSource; visibility:FactVisibility[]; protection:FactProtection; confidence:FactConfidence; provenance:string; tags?:string[] }
+export type { FactConfidence, FactProtection, FactRecord, FactSource, FactVisibility } from "../../domain/src/index.js";
+import type { FactRecord } from "../../domain/src/index.js";
 export interface FactQuery { viewer:string; terms:string[]; limit?:number }
 const words=(s:string)=>new Set(s.toLowerCase().match(/[a-z0-9]+/g)??[]);
 export class FactLedger {

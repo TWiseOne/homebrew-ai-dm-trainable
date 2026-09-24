@@ -8,7 +8,8 @@
   },
   "scripts": {
     "build": "tsc -p tsconfig.json",
-    "test": "npm run build && node dist/tests/v06.test.js",
+    "test": "npm run build && node dist/tests/v06.test.js && node dist/tests/play-slice.test.js",
+    "play": "npm run build && node --env-file-if-exists=.env dist/apps/play/src/index.js",
     "demo": "npm run build && node dist/apps/demo/src/index.js",
     "ollama:test": "npm run build && node --env-file-if-exists=.env dist/apps/ollama-smoke/src/index.js",
     "dm:eval": "npm run build && node --env-file-if-exists=.env dist/apps/dm-eval/src/index.js",
