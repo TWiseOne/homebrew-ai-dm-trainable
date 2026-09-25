@@ -23,6 +23,8 @@ const talk = await play.playerText(state, "Hello Colm, what do you need?");
 assert.equal(talk.status, "narrated");
 assert.equal(state.flags.questKnown, true);
 assert.equal(talk.trace?.context.visibleFactIds.includes("f-goblin"), false);
+assert.equal(talk.trace?.context.visibleFactIds.includes("f-lantern"), false);
+assert.doesNotMatch(talk.narration, /goblin/i);
 assert.equal(state.currentSceneId, "yard");
 
 const moved = await play.playerText(state, "I go to the door.");
@@ -57,9 +59,17 @@ assert.equal(state.encounter?.active, false);
 
 await play.playerText(state, "I take the lantern.");
 assert.equal(actorById(state, "aria").inventory.some((item) => item.itemId === "lantern"), true);
-await play.playerText(state, "I return to the yard.");
+const returned = await play.playerText(state, "I return to the yard.");
 assert.equal(state.currentSceneId, "yard");
+assert.equal(Boolean(state.flags.questComplete), false);
+assert.equal(returned.trace?.context.visibleFactIds.includes("f-goblin-seen"), false);
+assert.doesNotMatch(returned.narration, /goblin/i);
+const still = await play.playerText(state, "Why do I still have the lantern?");
+assert.match(still.narration, /still in Aria's inventory/);
+assert.equal(actorById(state, "aria").inventory.some((item) => item.itemId === "lantern"), true);
+await play.playerText(state, "give the lantern to Colm");
 assert.equal(state.flags.questComplete, true);
+assert.equal(actorById(state, "aria").inventory.some((item) => item.itemId === "lantern"), false);
 
 const traces = fs.readFileSync(join(dir, `${state.id}.jsonl`), "utf8").trim().split("\n").map((line) => JSON.parse(line));
 const door = traces.find((trace) => trace.roll?.purpose === undefined && trace.roll?.natural === 6);
@@ -76,8 +86,8 @@ const loaded = store.load(state.id)!;
 assert.equal(loaded.currentSceneId, "yard");
 assert.equal(loaded.flags.questComplete, true);
 assert.equal((actorById(loaded, "aria").rulesData as { hitPoints: { current: number } }).hitPoints.current, 10);
-assert.equal(actorById(loaded, "aria").inventory[0]?.itemId, "lantern");
-assert.equal(loaded.ledger.some((fact) => fact.id === "f-taken"), true);
+assert.equal(actorById(loaded, "aria").inventory.some((item) => item.itemId === "lantern"), false);
+assert.match(loaded.ledger.find((fact) => fact.id === "f-lantern")?.value ?? "", /Colm/);
 store.close();
 
 const asking: DmModel = { async interpret({ playerText }) { return { intent: "talk", resolutionChoice: null, factProposals: [] }; }, async narrate() { return "Tell me your d20 result."; } };
@@ -134,9 +144,19 @@ tripState.flags.doorOpen = true;
 (actorById(tripState, "goblin").rulesData as { hitPoints: { current: number } }).hitPoints.current = 0;
 const carried = await trip.playerText(tripState, "take the lantern and walk back to Colm");
 assert.equal(tripState.currentSceneId, "yard");
-assert.equal(actorById(tripState, "aria").inventory.some((item) => item.itemId === "lantern"), true);
+assert.equal(actorById(tripState, "aria").inventory.some((item) => item.itemId === "lantern"), false);
 assert.equal(tripState.flags.questComplete, true);
-assert.match(carried.narration, /lantern/);
+assert.match(carried.narration, /hands are empty/);
+
+const snatch = createPlay({ model: scriptedModel(), engineDice: new QueueDice([], []), traceDir: dir });
+const snatchState = snatch.newGame();
+snatchState.currentSceneId = "storehouse";
+snatchState.flags.doorOpen = true;
+snatchState.ledger.push({ id: "f-goblin-seen", subject: "Goblin", predicate: "stands", value: "among the crates in the storehouse", source: "engine_result", visibility: ["player"], protection: "established", confidence: "explicit", provenance: "event:SCENE_ENTERED", tags: ["storehouse"] });
+const grabbed = await snatch.playerText(snatchState, "try to take the lantern");
+assert.equal(grabbed.status, "need_roll");
+assert.match(grabbed.prompt ?? "", /initiative/);
+assert.equal(actorById(snatchState, "aria").inventory.some((item) => item.itemId === "lantern"), false);
 
 let englishTries = 0;
 const bilingual: DmModel = {

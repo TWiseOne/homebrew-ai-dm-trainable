@@ -8,7 +8,7 @@ The standing directive's immediate milestone is a playable runtime, not another 
 
 | Claim | Repo | Label |
 |---|---|---|
-| No complete playable session loop | `npm run play` runs The Storehouse Lantern: Ollama, broker, human d20, engine goblin dice, save/reload, and `data/play-traces`. Narration is asked for the scene after the engine change, and a non-English reply is retried once. The DM Lab still does not call the engine. A replay by the user is still required. | PARTIAL |
+| No complete playable session loop | `npm run play` runs The Storehouse Lantern. The narration line includes the goblin only after Aria has seen it. Giving the lantern to Colm removes it from inventory. A replay by the user is still required. | PARTIAL |
 | Fact Ledger and Narrative Authority are not on the play path | `npm run play` reads `state.ledger` and calls `reviewNarrativeClaim` before a proposal can become a fact. The DM Lab still does not. | IMPLEMENTED AND PLAYABLE for this adventure only |
 | Resolution Broker is not a runtime | `packages/session/src/broker.ts` builds options for The Storehouse Lantern and the play client calls it. Eval files still hand-write their own options. | IMPLEMENTED AND PLAYABLE for this adventure only |
 | Mechanics are a partial 5e subset | `Dnd5eRuleset` resolves checks, saves, initiative, one weapon attack, rest. `create5eActor` sets `proficiencyBonus: 2`. | PARTIAL |

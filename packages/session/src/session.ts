@@ -6,7 +6,7 @@ import { actorById } from "../../domain/src/index.js";
 import { CampaignEngine, FactLedger, reviewNarrativeClaim } from "../../campaign-engine/src/index.js";
 import { Dnd5eRuleset } from "../../rules-dnd5e/src/index.js";
 import { DOOR_DC, DOOR_FAIL_DAMAGE, campaign, createParty, seedFacts } from "./adventure.js";
-import { chooseOption, keywordIntent, legalOptions, publicOptions, turnActorId, type BrokerOption, type IntentKind } from "./broker.js";
+import { chooseOption, keywordIntent, legalOptions, publicOptions, turnActorId, wantsHandoff, type BrokerOption, type IntentKind } from "./broker.js";
 import type { DmModel, FactProposal } from "./model.js";
 
 export interface StepResult {
@@ -73,9 +73,13 @@ export class PlaySession {
     const intent: IntentKind = interpreted.intent || keywordIntent(playerText);
     const choice = chooseOption(state, options, intent, playerText, interpreted.resolutionChoice);
     const review = reviewProposals(state, interpreted.factProposals);
-    if (!choice && intent === "take") return this.finish(state, playerText, options, intent, null, "reject", opened, ["The goblin is still between Aria and the lantern."], review, gaps, "The goblin is still between Aria and the lantern.");
+    if (wantsHandoff(playerText) && hasLantern(state) && !goblinBetween(state)) {
+      const delta = this.deliverLantern(state);
+      return this.finish(state, playerText, options, intent, "res_give", "resolve", opened, delta, review, gaps, delta.join(" "));
+    }
+    if (!choice && intent === "take") return this.finish(state, playerText, options, intent, null, "reject", opened, [heldLantern(state)], review, gaps, heldLantern(state));
     if (!choice && intent === "attack") return this.finish(state, playerText, options, intent, null, "reject", opened, [], review, gaps, "No attack is resolved. The goblin is not in reach.");
-    if (!choice) return this.finish(state, playerText, options, intent, null, "narrate", opened, [], review, gaps, engineLine(opened, "No mechanical change."));
+    if (!choice) return this.finish(state, playerText, options, intent, null, "narrate", opened, [], review, gaps, engineLine(opened, heldLantern(state)));
     if (choice.engine === "check" || choice.engine === "initiative" || choice.engine === "attack") {
       const purpose = choice.engine === "check" ? "check" : choice.engine === "initiative" ? "initiative" : "attack";
       state.pendingRoll = { purpose, optionId: choice.id, actorId: "aria", prompt: rollPrompt(purpose), playerText, earlierRolls: [] };
@@ -144,23 +148,26 @@ export class PlaySession {
       if (choice.sceneId === "storehouse" && !state.flags.doorOpen) return ["The door is still barred."];
       this.engine.enterScene(state, choice.sceneId);
       if (choice.sceneId === "storehouse") this.revealGoblin(state);
-      if (choice.sceneId === "yard" && hasLantern(state)) state.flags.questComplete = true;
       return [`Scene: ${sceneName(state)}.`];
     }
+    if (choice.engine === "give") return this.deliverLantern(state);
     if (choice.engine === "take") {
       this.engine.giveItem(state, "aria", "lantern");
       state.flags.hasLantern = true;
+      const carried = reviseFact(state, "f-lantern", "carried by Aria");
+      if (carried) carried.tags = ["storehouse", "yard"];
       addFact(state, { id: "f-taken", subject: "Aria", predicate: "carries", value: "the storehouse lantern", source: "engine_result", visibility: ["player"], protection: "established", confidence: "explicit", provenance: "event:ITEM_GAINED", tags: ["storehouse", "yard"] });
-      if (/\b(return|back|yard|colm)\b/i.test(playerText)) {
+      if (wantsHandoff(playerText)) return ["Aria takes the lantern.", ...this.deliverLantern(state)];
+      if (/\b(return|back|yard)\b/i.test(playerText)) {
         this.engine.enterScene(state, "yard");
-        state.flags.questComplete = true;
-        return ["Aria takes the lantern.", `Scene: ${sceneName(state)}.`];
+        return ["Aria takes the lantern.", `Scene: ${sceneName(state)}.`, "The lantern is still in Aria's inventory."];
       }
       return ["Aria takes the lantern."];
     }
     if (choice.intent === "talk" && state.currentSceneId === "yard") {
       state.flags.questKnown = true;
-      if (state.flags.questComplete) return ["Colm takes the lantern. The errand is done."];
+      if (state.flags.questComplete) return ["The errand is already done."];
+      if (hasLantern(state)) return ["Colm is waiting for the lantern. It is still in Aria's hands."];
       return ["Colm asks Aria to bring back the storehouse lantern."];
     }
     if (choice.intent === "take") return ["The goblin is still between Aria and the lantern."];
@@ -175,6 +182,23 @@ export class PlaySession {
   private markDoorOpen(state: GameState) {
     const fact = reviseFact(state, "f-door", "open. The oak bar has been lifted.");
     if (fact && !(fact.tags ?? []).includes("storehouse")) fact.tags = [...(fact.tags ?? []), "storehouse"];
+  }
+
+  private deliverLantern(state: GameState): string[] {
+    const lines: string[] = [];
+    if (state.currentSceneId !== "yard") {
+      this.engine.enterScene(state, "yard");
+      lines.push(`Scene: ${sceneName(state)}.`);
+    }
+    this.engine.removeItem(state, "aria", "lantern");
+    state.flags.hasLantern = false;
+    state.flags.questComplete = true;
+    const lantern = reviseFact(state, "f-lantern", "with Warden Colm in the yard");
+    if (lantern) lantern.tags = ["yard"];
+    const taken = reviseFact(state, "f-taken", "handed the lantern to Colm");
+    if (taken) taken.tags = ["yard"];
+    lines.push("Colm takes the lantern. Aria's hands are empty. The errand is done.");
+    return lines;
   }
 
   private markGoblinDown(state: GameState) {
@@ -288,7 +312,7 @@ function addGapFact(state: GameState, text: string, reason: string) {
 function buildContext(state: GameState, playerText: string): { text: string; scene: string; visibleFactIds: string[] } {
   const ledger = loadLedger(state);
   const scene = campaign.scenes.find((item) => item.id === state.currentSceneId);
-  const visible = state.ledger.filter((fact) => ledger.visibleTo(fact, "aria") && ((fact.tags ?? []).includes(state.currentSceneId) || ledger.relevant({ viewer: "aria", terms: playerText.split(/\W+/).filter(Boolean), limit: 8 }).some((found) => found.id === fact.id)));
+  const visible = state.ledger.filter((fact) => ledger.visibleTo(fact, "aria") && (fact.tags ?? []).includes(state.currentSceneId));
   const ids = [...new Set(visible.map((fact) => fact.id))];
   const turn = turnActorId(state);
   const door = state.flags.doorOpen ? "The storehouse door is open." : "The storehouse door is barred.";
@@ -298,14 +322,32 @@ function buildContext(state: GameState, playerText: string): { text: string; sce
 
 function sceneDescription(state: GameState): string {
   if (state.currentSceneId === "door" && state.flags.doorOpen) return "The storehouse door stands open. The oak bar has been lifted.";
-  if (state.currentSceneId === "storehouse" && hpOf(state, "goblin") <= 0) return "Crates and a hanging lantern fill the storehouse. The goblin lies defeated.";
+  if (state.currentSceneId === "storehouse" && goblinKnown(state) && hpOf(state, "goblin") <= 0) return "Crates fill the storehouse. The goblin lies defeated.";
   return campaign.scenes.find((item) => item.id === state.currentSceneId)?.description ?? "";
 }
 
 function situation(state: GameState): string {
   const door = state.flags.doorOpen ? "The storehouse door is open." : "The storehouse door is barred.";
-  const goblin = hpOf(state, "goblin") > 0 ? "The goblin is alive." : "The goblin is defeated.";
-  return `${sceneName(state)}. ${door} ${goblin}`;
+  const parts = [`${sceneName(state)}. ${door}`];
+  if (state.currentSceneId === "storehouse" && goblinKnown(state)) parts.push(hpOf(state, "goblin") > 0 ? "The goblin is here." : "The goblin lies defeated.");
+  if (hasLantern(state)) parts.push("Aria is carrying the lantern.");
+  else if (state.flags.questComplete) parts.push("Colm has the lantern.");
+  return parts.join(" ");
+}
+
+function goblinKnown(state: GameState): boolean {
+  return state.ledger.some((fact) => fact.id === "f-goblin-seen");
+}
+
+function goblinBetween(state: GameState): boolean {
+  return state.currentSceneId === "storehouse" && hpOf(state, "goblin") > 0;
+}
+
+function heldLantern(state: GameState): string {
+  if (goblinBetween(state) && !hasLantern(state)) return "The goblin is still between Aria and the lantern.";
+  if (hasLantern(state)) return "No mechanical change. The lantern is still in Aria's inventory.";
+  if (state.flags.questComplete) return "No mechanical change. Colm already has the lantern.";
+  return "No mechanical change.";
 }
 
 function mixesAnotherLanguage(text: string): boolean {

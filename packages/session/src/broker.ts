@@ -2,7 +2,7 @@ import type { GameState } from "../../domain/src/index.js";
 import { actorById } from "../../domain/src/index.js";
 
 export type IntentKind = "talk" | "move" | "force" | "attack" | "take" | "other";
-export type OptionEngine = "check" | "attack" | "initiative" | "move" | "take" | "none";
+export type OptionEngine = "check" | "attack" | "initiative" | "move" | "take" | "give" | "none";
 
 export interface BrokerOption {
   id: string;
@@ -47,6 +47,7 @@ export function legalOptions(state: GameState): BrokerOption[] {
   const goblinAlive = hp(state, "goblin") > 0;
   if (scene === "yard") {
     options.push({ id: "res_listen", requirement: "optional", applicability: "speak with Colm", rollOwner: "none", engine: "none", intent: "talk" });
+    if (hasItem(state, "aria", "lantern") && !state.flags.questComplete) options.push({ id: "res_give", requirement: "optional", applicability: "give the lantern to Colm", rollOwner: "none", engine: "give", intent: "take" });
     if (state.flags.doorOpen) options.push({ id: "res_into_storehouse", requirement: "optional", applicability: "go into the open storehouse", rollOwner: "none", engine: "move", intent: "move", sceneId: "storehouse" });
     options.push({ id: "res_to_door", requirement: "optional", applicability: "go to the storehouse door", rollOwner: "none", engine: "move", intent: "move", sceneId: "door" });
   }
@@ -67,6 +68,11 @@ export function legalOptions(state: GameState): BrokerOption[] {
 export function chooseOption(state: GameState, options: BrokerOption[], intent: IntentKind, playerText: string, resolutionChoice: string | null): BrokerOption | undefined {
   const mandatory = options.filter((option) => option.requirement === "mandatory");
   if (mandatory.length === 1) return mandatory[0];
+  if (wantsHandoff(playerText)) {
+    const give = options.find((option) => option.id === "res_give");
+    if (give) return give;
+  }
+  if (options.some((option) => option.id === "res_init") && reachesForLantern(playerText)) return options.find((option) => option.id === "res_init");
   const inside = options.find((option) => option.id === "res_inside" || option.sceneId === "storehouse");
   if ((intent === "force" || /\b(force|open|shoulder|pry|bar|beam)\b/i.test(playerText)) && state.flags.doorOpen && inside && state.currentSceneId === "door") return inside;
   if (resolutionChoice) {
@@ -75,7 +81,7 @@ export function chooseOption(state: GameState, options: BrokerOption[], intent: 
   }
   if (intent === "force") return options.find((option) => option.intent === "force");
   if (intent === "move") return pickMove(state, options, playerText);
-  return options.find((option) => option.intent === intent);
+  return options.find((option) => option.intent === intent && option.engine !== "give");
 }
 
 function pickMove(state: GameState, options: BrokerOption[], playerText: string): BrokerOption | undefined {
@@ -94,6 +100,18 @@ function pickMove(state: GameState, options: BrokerOption[], playerText: string)
     return moves.find((option) => option.sceneId === "yard");
   }
   return undefined;
+}
+
+export function wantsHandoff(text: string): boolean {
+  const t = text.toLowerCase();
+  const lantern = /\blantern\b/.test(t);
+  const toColm = /\b(colm|warden)\b/.test(t);
+  const gives = /\b(give|hand|pass|offer|return|bring|back)\b/.test(t);
+  return lantern && toColm && gives;
+}
+
+export function reachesForLantern(text: string): boolean {
+  return /\b(take|grab|snatch|pick)\b/i.test(text) && /\blantern\b/i.test(text) && !wantsHandoff(text);
 }
 
 export function publicOptions(options: BrokerOption[]): Array<{ id: string; requirement: BrokerOption["requirement"]; applicability: string }> {

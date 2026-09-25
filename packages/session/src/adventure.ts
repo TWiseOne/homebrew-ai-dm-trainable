@@ -21,7 +21,7 @@ export const campaign: CampaignDefinition = {
 export const seedFacts: FactRecord[] = [
   { id: "f-colm", subject: "Colm", predicate: "wants", value: "the storehouse lantern brought back to the yard", source: "authored_canon", visibility: ["player"], protection: "established", confidence: "explicit", provenance: "campaign:storehouse-lantern", tags: ["yard"] },
   { id: "f-door", subject: "Storehouse door", predicate: "is", value: "barred with an oak beam", source: "authored_canon", visibility: ["player"], protection: "established", confidence: "explicit", provenance: "campaign:storehouse-lantern", tags: ["door", "yard"] },
-  { id: "f-lantern", subject: "Lantern", predicate: "hangs", value: "from a hook inside the storehouse", source: "authored_canon", visibility: ["player"], protection: "established", confidence: "explicit", provenance: "campaign:storehouse-lantern", tags: ["storehouse", "yard"] },
+  { id: "f-lantern", subject: "Lantern", predicate: "hangs", value: "from a hook inside the storehouse", source: "authored_canon", visibility: ["player"], protection: "established", confidence: "explicit", provenance: "campaign:storehouse-lantern", tags: ["storehouse"] },
   { id: "f-goblin", subject: "Storehouse", predicate: "hides", value: "one hostile goblin", source: "authored_canon", visibility: ["dm_only"], protection: "protected", confidence: "explicit", provenance: "campaign:storehouse-lantern", tags: ["storehouse"] },
 ];
 

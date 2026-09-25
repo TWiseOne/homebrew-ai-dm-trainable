@@ -36,7 +36,7 @@ export function ollamaModel(input?: { baseUrl?: string; model?: string; timeoutM
       return { intent, resolutionChoice: parsed?.resolutionChoice || null, factProposals: Array.isArray(parsed?.factProposals) ? parsed.factProposals : [] };
     },
     async narrate({ playerText, context, engineSummary }) {
-      return chat(base, key, model, timeoutMs, undefined, "You are the fiction layer of a D&D game. Write in English only, in second person, in two to four sentences. Describe only what the ENGINE block says happened and what the scene facts say is true now. Do not describe an attack, a move, a closed door, or a living goblin unless the ENGINE block says so. Do not change numbers. Do not ask the player to roll. Do not add objects, weather, or any language other than English.", `CONTEXT:\n${context}\n\nPLAYER:\n${playerText}\n\nENGINE:\n${engineSummary || "No mechanical change."}\n\nNarrate only that engine result, in English.`);
+      return chat(base, key, model, timeoutMs, undefined, "You are the fiction layer of a D&D game. Write in English only, in second person, in two to four sentences. Describe only what the ENGINE block says happened and what the visible facts say is true now. If the ENGINE block says nothing changed, say that the action did not happen. Do not describe a gift, attack, discovery, or goblin unless the ENGINE block says so. Do not change numbers. Do not ask the player to roll. Do not add objects, weather, or any language other than English.", `CONTEXT:\n${context}\n\nPLAYER:\n${playerText}\n\nENGINE:\n${engineSummary || "No mechanical change."}\n\nNarrate only that engine result, in English.`);
     },
   };
 }
