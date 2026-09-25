@@ -36,7 +36,7 @@ export function ollamaModel(input?: { baseUrl?: string; model?: string; timeoutM
       return { intent, resolutionChoice: parsed?.resolutionChoice || null, factProposals: Array.isArray(parsed?.factProposals) ? parsed.factProposals : [] };
     },
     async narrate({ playerText, context, engineSummary }) {
-      return chat(base, key, model, timeoutMs, undefined, "You are the fiction layer of a D&D game. Narrate in second person, succinctly. The engine line is already true. Do not change its numbers. Do not ask the player to roll or to tell you a die result. Do not invent objects, clues, or injuries.", `CONTEXT:\n${context}\n\nPLAYER:\n${playerText}\n\nENGINE:\n${engineSummary || "No mechanical change."}\n\nNarrate what just happened.`);
+      return chat(base, key, model, timeoutMs, undefined, "You are the fiction layer of a D&D game. Write in English only, in second person, in two to four sentences. Describe only what the ENGINE block says happened and what the scene facts say is true now. Do not describe an attack, a move, a closed door, or a living goblin unless the ENGINE block says so. Do not change numbers. Do not ask the player to roll. Do not add objects, weather, or any language other than English.", `CONTEXT:\n${context}\n\nPLAYER:\n${playerText}\n\nENGINE:\n${engineSummary || "No mechanical change."}\n\nNarrate only that engine result, in English.`);
     },
   };
 }

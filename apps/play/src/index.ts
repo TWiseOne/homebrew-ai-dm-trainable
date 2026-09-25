@@ -27,7 +27,7 @@ try {
       continue;
     }
     const step = await play.playerText(state, line);
-    show(step.lines, step.narration);
+    show(step.lines, step.narration, step.trace?.gaps);
     if (step.status === "need_roll" && step.prompt) console.log(step.prompt);
     else printState();
     store.upsert(state);
@@ -51,14 +51,16 @@ function loadState(): GameState {
 
 async function applyDie(natural: number, method: "manual_raw_die" | "digital_button") {
   const step = await play.submitDie(state, natural, method);
-  show(step.lines, step.narration);
+  show(step.lines, step.narration, step.trace?.gaps);
   if (step.status === "need_roll" && step.prompt) console.log(step.prompt);
   store.upsert(state);
   printState();
 }
 
-function show(lines: string[], narration: string) {
+function show(lines: string[], narration: string, gaps: string[] = []) {
   for (const line of lines) console.log(line);
+  for (const gap of gaps) if (gap.startsWith("Model:")) console.log(gap);
+  if (gaps.includes("narration_non_english")) console.log("Model: the reply was not English and was set aside.");
   if (narration) console.log(`DM  ${narration}`);
 }
 

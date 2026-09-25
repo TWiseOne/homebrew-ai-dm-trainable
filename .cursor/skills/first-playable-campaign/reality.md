@@ -8,7 +8,7 @@ The standing directive's immediate milestone is a playable runtime, not another 
 
 | Claim | Repo | Label |
 |---|---|---|
-| No complete playable session loop | `npm run play` runs The Storehouse Lantern: Ollama, broker, human d20, engine goblin dice, save/reload, and `data/play-traces`. The DM Lab still does not call the engine. A full playtest by the user is still required. | PARTIAL |
+| No complete playable session loop | `npm run play` runs The Storehouse Lantern: Ollama, broker, human d20, engine goblin dice, save/reload, and `data/play-traces`. Narration is asked for the scene after the engine change, and a non-English reply is retried once. The DM Lab still does not call the engine. A replay by the user is still required. | PARTIAL |
 | Fact Ledger and Narrative Authority are not on the play path | `npm run play` reads `state.ledger` and calls `reviewNarrativeClaim` before a proposal can become a fact. The DM Lab still does not. | IMPLEMENTED AND PLAYABLE for this adventure only |
 | Resolution Broker is not a runtime | `packages/session/src/broker.ts` builds options for The Storehouse Lantern and the play client calls it. Eval files still hand-write their own options. | IMPLEMENTED AND PLAYABLE for this adventure only |
 | Mechanics are a partial 5e subset | `Dnd5eRuleset` resolves checks, saves, initiative, one weapon attack, rest. `create5eActor` sets `proficiencyBonus: 2`. | PARTIAL |
@@ -37,7 +37,7 @@ There is no `imports/` campaign tree.
 | 15 | Campaign vs save vs character | PARTIAL. `CampaignDefinition` and `SaveStore` exist. No character library. |
 | 16, 24 | Source vs canon vs runtime; `imports/` ingestion | DESIGNED ONLY. First adventure is original data written into the campaign format. |
 | 17, 18 | Knowledge split; one fact model | PARTIAL. Two shapes: `KnowledgeFact` and `FactRecord`. Play path uses `FactRecord` only. |
-| 19 | Ephemeral prose vs persistent facts | PARTIAL. `reviewNarrativeClaim` is unused by play. |
+| 19 | Ephemeral prose vs persistent facts | PARTIAL. Play calls `reviewNarrativeClaim` and does not auto-accept proposals. The narration prompt may describe only the engine result. |
 | 20, 21, 22 | Agency, style, informative vs difficulty | TRAINING / EVALUATION text in `dm-experience/` and `dm-training/`. Not a play setting that changes a session. |
 | 23 | Context selection, not a full dump | MISSING on the play path. |
 | 25, 26, 27 | Play traces, then review, then maybe train. Teacher is not the rules authority. | TRAINING policy. Traces start with the first session. Promotion stays manual. |

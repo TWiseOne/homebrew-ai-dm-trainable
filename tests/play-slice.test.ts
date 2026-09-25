@@ -32,12 +32,18 @@ assert.equal(moved.status, "narrated");
 const forced = await play.playerText(state, "I shoulder the door open.");
 assert.equal(forced.status, "need_roll");
 assert.match(forced.prompt ?? "", /natural d20/);
-await play.submitDie(state, 6, "manual_raw_die");
+const opened = await play.submitDie(state, 6, "manual_raw_die");
 const aria = () => (actorById(state, "aria").rulesData as { hitPoints: { current: number } }).hitPoints.current;
 assert.equal(aria(), 10);
 assert.equal(state.currentSceneId, "storehouse");
 assert.equal(state.flags.doorOpen, true);
+assert.match(state.ledger.find((fact) => fact.id === "f-door")?.value ?? "", /open/);
+assert.match(opened.narration, /door is open/);
 assert.equal(state.ledger.some((fact) => fact.id === "f-goblin-seen"), true);
+
+const stayed = await play.playerText(state, "Enter the room but be vigilant");
+assert.equal(stayed.status, "narrated");
+assert.equal(state.currentSceneId, "storehouse");
 
 const fight = await play.playerText(state, "I attack the goblin.");
 assert.equal(fight.status, "need_roll");
@@ -98,6 +104,61 @@ const init = await hitPlay.submitDie(hitState, 1, "manual_raw_die");
 assert.match(init.lines.join("\n"), /Goblin attack d20 18 \+ 4 = 22/);
 assert.equal((actorById(hitState, "aria").rulesData as { hitPoints: { current: number } }).hitPoints.current, 6);
 assert.equal(init.status, "need_roll");
+
+const openDoor = createPlay({ model: scriptedModel(), engineDice: new QueueDice([], []), traceDir: dir });
+const openState = openDoor.newGame();
+openState.currentSceneId = "door";
+openState.flags.doorOpen = true;
+const stepped = await openDoor.playerText(openState, "force the door");
+assert.equal(stepped.status, "narrated");
+assert.equal(openState.currentSceneId, "storehouse");
+assert.equal(openState.pendingRoll, undefined);
+
+const counter = createPlay({ model: scriptedModel(), engineDice: new QueueDice([3, 1], [1]), traceDir: dir });
+const counterState = counter.newGame();
+counterState.currentSceneId = "storehouse";
+counterState.flags.doorOpen = true;
+await counter.playerText(counterState, "I attack the goblin.");
+const counterInit = await counter.submitDie(counterState, 18, "manual_raw_die");
+assert.equal(counterInit.status, "need_roll");
+const counterHit = await counter.submitDie(counterState, 10, "manual_raw_die");
+assert.match(counterHit.lines.join("\n"), /Goblin attack d20 1 \+ 4 = 5/);
+assert.equal((actorById(counterState, "goblin").rulesData as { hitPoints: { current: number } }).hitPoints.current, 3);
+assert.equal(counterState.encounter?.active, true);
+assert.equal(counterState.encounter?.initiative[counterState.encounter.turnIndex]?.actorId, "aria");
+
+const trip = createPlay({ model: scriptedModel(), engineDice: new QueueDice([], []), traceDir: dir });
+const tripState = trip.newGame();
+tripState.currentSceneId = "storehouse";
+tripState.flags.doorOpen = true;
+(actorById(tripState, "goblin").rulesData as { hitPoints: { current: number } }).hitPoints.current = 0;
+const carried = await trip.playerText(tripState, "take the lantern and walk back to Colm");
+assert.equal(tripState.currentSceneId, "yard");
+assert.equal(actorById(tripState, "aria").inventory.some((item) => item.itemId === "lantern"), true);
+assert.equal(tripState.flags.questComplete, true);
+assert.match(carried.narration, /lantern/);
+
+let englishTries = 0;
+const bilingual: DmModel = {
+  async interpret() { return { intent: "talk", resolutionChoice: null, factProposals: [] }; },
+  async narrate() { englishTries += 1; return englishTries === 1 ? "Light shows through the缝隙." : "The yard is quiet."; },
+};
+const englishPlay = createPlay({ model: bilingual, engineDice: new QueueDice([], []), traceDir: dir });
+const englishState = englishPlay.newGame();
+const english = await englishPlay.playerText(englishState, "Hello Colm");
+assert.equal(englishTries, 2);
+assert.equal(english.narration, "The yard is quiet.");
+assert.equal(english.trace?.gaps.includes("narration_non_english"), false);
+
+const foreign: DmModel = {
+  async interpret() { return { intent: "talk", resolutionChoice: null, factProposals: [] }; },
+  async narrate() { return "缝隙"; },
+};
+const foreignPlay = createPlay({ model: foreign, engineDice: new QueueDice([], []), traceDir: dir });
+const foreignState = foreignPlay.newGame();
+const foreignTurn = await foreignPlay.playerText(foreignState, "Hello Colm");
+assert.equal(foreignTurn.trace?.gaps.includes("narration_non_english"), true);
+assert.equal(foreignTurn.narration.includes("缝隙"), false);
 
 rmSync(dir, { recursive: true, force: true });
 rmSync(saveDir, { recursive: true, force: true });

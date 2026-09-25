@@ -65,21 +65,24 @@ export class PlaySession {
     try {
       interpreted = await this.model.interpret({ playerText, context: context.text, options: publicOptions(options) });
     } catch (error) {
+      const message = error instanceof Error ? error.message : "intent failed";
       gaps.push("model_intent_failed");
+      gaps.push(`Model: intent call failed (${message}). Your words were used instead.`);
       interpreted = { intent: keywordIntent(playerText), resolutionChoice: null, factProposals: [] as FactProposal[] };
     }
     const intent: IntentKind = interpreted.intent || keywordIntent(playerText);
-    const choice = chooseOption(options, intent, playerText, interpreted.resolutionChoice);
+    const choice = chooseOption(state, options, intent, playerText, interpreted.resolutionChoice);
     const review = reviewProposals(state, interpreted.factProposals);
-    if (!choice && intent === "take") return this.finish(state, playerText, context, options, intent, null, "reject", opened, ["The goblin is still between Aria and the lantern."], review, gaps, "The goblin is still between Aria and the lantern.");
-    if (!choice) return this.finish(state, playerText, context, options, intent, null, "narrate", opened, [], review, gaps, engineLine(opened, "No mechanical change."));
+    if (!choice && intent === "take") return this.finish(state, playerText, options, intent, null, "reject", opened, ["The goblin is still between Aria and the lantern."], review, gaps, "The goblin is still between Aria and the lantern.");
+    if (!choice && intent === "attack") return this.finish(state, playerText, options, intent, null, "reject", opened, [], review, gaps, "No attack is resolved. The goblin is not in reach.");
+    if (!choice) return this.finish(state, playerText, options, intent, null, "narrate", opened, [], review, gaps, engineLine(opened, "No mechanical change."));
     if (choice.engine === "check" || choice.engine === "initiative" || choice.engine === "attack") {
       const purpose = choice.engine === "check" ? "check" : choice.engine === "initiative" ? "initiative" : "attack";
       state.pendingRoll = { purpose, optionId: choice.id, actorId: "aria", prompt: rollPrompt(purpose), playerText, earlierRolls: [] };
       return { status: "need_roll", lines: opened, narration: "", prompt: state.pendingRoll.prompt };
     }
-    const delta = this.applyQuiet(state, choice);
-    return this.finish(state, playerText, context, options, intent, choice.id, choice.engine === "none" && intent === "talk" ? "narrate" : "resolve", opened, delta, review, gaps, engineLine(opened, delta.join(" ")));
+    const delta = this.applyQuiet(state, choice, playerText);
+    return this.finish(state, playerText, options, intent, choice.id, choice.engine === "none" && intent === "talk" ? "narrate" : "resolve", opened, delta, review, gaps, engineLine(opened, delta.join(" ")));
   }
 
   async submitDie(state: GameState, natural: number, method: "manual_raw_die" | "digital_button"): Promise<StepResult> {
@@ -87,7 +90,6 @@ export class PlaySession {
     if (!pending) throw new Error("No roll is waiting.");
     if (!Number.isInteger(natural) || natural < 1 || natural > 20) throw new Error("Enter a natural d20 from 1 to 20.");
     const playerText = pending.playerText ?? `(natural d20 ${natural})`;
-    const context = buildContext(state, pending.prompt);
     const options = legalOptions(state);
     const lines: string[] = [];
     const earlier = [...(pending.earlierRolls ?? [])];
@@ -102,9 +104,10 @@ export class PlaySession {
         lines.push(`Engine  The bar splits and clips Aria for ${DOOR_FAIL_DAMAGE} damage. HP ${hp}/${maxHp(state, "aria")}. The door opens anyway.`);
       }
       state.flags.doorOpen = true;
+      this.markDoorOpen(state);
       this.enterStorehouse(state);
       lines.push("Engine  Scene: Storehouse.");
-      return this.finish(state, playerText, context, options, "force", pending.optionId, "resolve", lines, ["door opened"], reviewProposals(state, []), [], lines.join(" "), roll, earlier);
+      return this.finish(state, playerText, options, "force", pending.optionId, "resolve", lines, ["door opened"], reviewProposals(state, []), [], lines.join(" "), roll, earlier);
     }
     if (pending.purpose === "initiative") {
       const dice = new SplitDice(natural, this.engineDice);
@@ -119,7 +122,7 @@ export class PlaySession {
         state.pendingRoll = { purpose: "attack", optionId: "res_strike", actorId: "aria", prompt: rollPrompt("attack"), playerText: pending.playerText, earlierRolls: earlier };
         return { status: "need_roll", lines, narration: "", prompt: state.pendingRoll.prompt };
       }
-      return this.finish(state, playerText, context, options, "attack", "res_init", "resolve", lines, ["initiative"], reviewProposals(state, []), [], lines.join(" "), earlier[0], earlier.slice(1));
+      return this.finish(state, playerText, options, "attack", "res_init", "resolve", lines, ["initiative"], reviewProposals(state, []), [], lines.join(" "), earlier[0], earlier.slice(1));
     }
     const result = this.engine.attack(state, "aria", "goblin", "longsword", new SplitDice(natural, this.engineDice));
     const roll: TraceRoll = { owner: "human", method, natural: result.die, modifier: result.modifier, total: result.total, dc: result.target, success: result.success, purpose: "attack" };
@@ -127,12 +130,16 @@ export class PlaySession {
     if (result.targetDefeated) {
       this.engine.endEncounter(state);
       state.flags.goblinDefeated = true;
+      this.markGoblinDown(state);
       lines.push("Engine  The goblin drops.");
-    } else lines.push(...this.pumpEngine(state));
-    return this.finish(state, playerText, context, options, "attack", pending.optionId, "resolve", lines, ["attack resolved"], reviewProposals(state, []), [], lines.join(" "), roll, earlier);
+    } else {
+      this.engine.endTurn(state);
+      lines.push(...this.pumpEngine(state));
+    }
+    return this.finish(state, playerText, options, "attack", pending.optionId, "resolve", lines, ["attack resolved"], reviewProposals(state, []), [], lines.join(" "), roll, earlier);
   }
 
-  private applyQuiet(state: GameState, choice: BrokerOption): string[] {
+  private applyQuiet(state: GameState, choice: BrokerOption, playerText: string): string[] {
     if (choice.engine === "move" && choice.sceneId) {
       if (choice.sceneId === "storehouse" && !state.flags.doorOpen) return ["The door is still barred."];
       this.engine.enterScene(state, choice.sceneId);
@@ -144,6 +151,11 @@ export class PlaySession {
       this.engine.giveItem(state, "aria", "lantern");
       state.flags.hasLantern = true;
       addFact(state, { id: "f-taken", subject: "Aria", predicate: "carries", value: "the storehouse lantern", source: "engine_result", visibility: ["player"], protection: "established", confidence: "explicit", provenance: "event:ITEM_GAINED", tags: ["storehouse", "yard"] });
+      if (/\b(return|back|yard|colm)\b/i.test(playerText)) {
+        this.engine.enterScene(state, "yard");
+        state.flags.questComplete = true;
+        return ["Aria takes the lantern.", `Scene: ${sceneName(state)}.`];
+      }
       return ["Aria takes the lantern."];
     }
     if (choice.intent === "talk" && state.currentSceneId === "yard") {
@@ -158,6 +170,15 @@ export class PlaySession {
   private enterStorehouse(state: GameState) {
     this.engine.enterScene(state, "storehouse");
     this.revealGoblin(state);
+  }
+
+  private markDoorOpen(state: GameState) {
+    const fact = reviseFact(state, "f-door", "open. The oak bar has been lifted.");
+    if (fact && !(fact.tags ?? []).includes("storehouse")) fact.tags = [...(fact.tags ?? []), "storehouse"];
+  }
+
+  private markGoblinDown(state: GameState) {
+    reviseFact(state, "f-goblin-seen", "lies defeated among the crates");
   }
 
   private revealGoblin(state: GameState) {
@@ -180,10 +201,27 @@ export class PlaySession {
     return lines;
   }
 
-  private async finish(state: GameState, playerText: string, context: ReturnType<typeof buildContext>, options: BrokerOption[], intent: IntentKind, resolutionChoice: string | null, mode: "narrate" | "resolve" | "reject", lines: string[], delta: string[], review: { disposition: string; reason: string }, gaps: string[], summary: string, roll?: TraceRoll, earlier: TraceRoll[] = []): Promise<StepResult> {
+  private async finish(state: GameState, playerText: string, options: BrokerOption[], intent: IntentKind, resolutionChoice: string | null, mode: "narrate" | "resolve" | "reject", lines: string[], delta: string[], review: { disposition: string; reason: string }, gaps: string[], summary: string, roll?: TraceRoll, earlier: TraceRoll[] = []): Promise<StepResult> {
+    const context = buildContext(state, playerText);
+    const engineSummary = `${summary}\nNow: ${situation(state)}`;
     let narration = "";
-    try { narration = await this.model.narrate({ playerText, context: context.text, engineSummary: summary }); }
-    catch { gaps.push("narration_fallback"); narration = summary || "The engine result stands."; }
+    try { narration = await this.model.narrate({ playerText, context: context.text, engineSummary }); }
+    catch (error) {
+      gaps.push("narration_fallback");
+      narration = `The model did not answer. ${error instanceof Error ? error.message : "Narration failed."}`;
+    }
+    if (mixesAnotherLanguage(narration)) {
+      try {
+        narration = await this.model.narrate({ playerText, context: context.text, engineSummary: `${engineSummary}\nThe previous reply was not English. Reply in English only.` });
+      } catch (error) {
+        gaps.push("narration_fallback");
+        narration = `The model did not answer. ${error instanceof Error ? error.message : "Narration failed."}`;
+      }
+      if (mixesAnotherLanguage(narration)) {
+        gaps.push("narration_non_english");
+        narration = "The narration was not in English, so it was set aside. The engine line above is what happened.";
+      }
+    }
     if (/tell me your|what did you roll|roll a d20|enter your (die|roll|d20)/i.test(narration)) {
       gaps.push("narration_asked_for_roll");
       narration = "The roll is already resolved.";
@@ -216,7 +254,7 @@ export function sceneView(state: GameState): string {
   const hp = `${hpOf(state, "aria")}/${maxHp(state, "aria")}`;
   const lantern = hasLantern(state) ? " carrying the lantern" : "";
   const quest = state.flags.questComplete ? " Errand complete." : "";
-  return `${campaign.title}\nAria HP ${hp}${lantern}. ${scene?.name ?? state.currentSceneId}.${quest}\n${scene?.description ?? ""}`;
+  return `${campaign.title}\nAria HP ${hp}${lantern}. ${scene?.name ?? state.currentSceneId}.${quest}\n${sceneDescription(state)}`;
 }
 
 function nextTurn(state: GameState): number {
@@ -253,8 +291,25 @@ function buildContext(state: GameState, playerText: string): { text: string; sce
   const visible = state.ledger.filter((fact) => ledger.visibleTo(fact, "aria") && ((fact.tags ?? []).includes(state.currentSceneId) || ledger.relevant({ viewer: "aria", terms: playerText.split(/\W+/).filter(Boolean), limit: 8 }).some((found) => found.id === fact.id)));
   const ids = [...new Set(visible.map((fact) => fact.id))];
   const turn = turnActorId(state);
-  const text = [`Scene: ${scene?.name}. ${scene?.description}`, `Aria HP ${hpOf(state, "aria")}/${maxHp(state, "aria")}.`, turn ? `Turn: ${turn}.` : "No encounter.", `Visible facts:`, ...state.ledger.filter((fact) => ids.includes(fact.id)).map((fact) => `- ${fact.subject} ${fact.predicate} ${fact.value}`)].join("\n");
-  return { text, scene: scene?.description ?? "", visibleFactIds: ids };
+  const door = state.flags.doorOpen ? "The storehouse door is open." : "The storehouse door is barred.";
+  const text = [`Scene: ${scene?.name}. ${sceneDescription(state)}`, door, `Aria HP ${hpOf(state, "aria")}/${maxHp(state, "aria")}.`, turn ? `Turn: ${turn}.` : "No encounter.", `Visible facts:`, ...state.ledger.filter((fact) => ids.includes(fact.id)).map((fact) => `- ${fact.subject} ${fact.predicate} ${fact.value}`)].join("\n");
+  return { text, scene: sceneDescription(state), visibleFactIds: ids };
+}
+
+function sceneDescription(state: GameState): string {
+  if (state.currentSceneId === "door" && state.flags.doorOpen) return "The storehouse door stands open. The oak bar has been lifted.";
+  if (state.currentSceneId === "storehouse" && hpOf(state, "goblin") <= 0) return "Crates and a hanging lantern fill the storehouse. The goblin lies defeated.";
+  return campaign.scenes.find((item) => item.id === state.currentSceneId)?.description ?? "";
+}
+
+function situation(state: GameState): string {
+  const door = state.flags.doorOpen ? "The storehouse door is open." : "The storehouse door is barred.";
+  const goblin = hpOf(state, "goblin") > 0 ? "The goblin is alive." : "The goblin is defeated.";
+  return `${sceneName(state)}. ${door} ${goblin}`;
+}
+
+function mixesAnotherLanguage(text: string): boolean {
+  return /[^\u0000-\u024F\u1E00-\u1EFF\u2010-\u2027\u2030-\u205E]/.test(text);
 }
 
 function loadLedger(state: GameState): FactLedger {
@@ -266,6 +321,14 @@ function loadLedger(state: GameState): FactLedger {
 function addFact(state: GameState, fact: FactRecord) {
   if (state.ledger.some((item) => item.id === fact.id)) return;
   state.ledger.push(fact);
+}
+
+function reviseFact(state: GameState, id: string, value: string): FactRecord | undefined {
+  const fact = state.ledger.find((item) => item.id === id);
+  if (!fact) return undefined;
+  fact.value = value;
+  fact.source = "engine_result";
+  return fact;
 }
 
 function writeTrace(dir: string, trace: TurnTrace) {

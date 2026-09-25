@@ -18,7 +18,7 @@ export function keywordIntent(text: string): IntentKind {
   const t = text.toLowerCase();
   if (/\b(attack|strike|stab|swing|hit|fight|slash)\b/.test(t)) return "attack";
   if (/\b(take|grab|pick up|lantern)\b/.test(t)) return "take";
-  if (/\b(shoulder|force|break|shove|pry|bar|open)\b/.test(t)) return "force";
+  if (/\b(shoulder|force|break|shove|pry|bar|beam|open)\b/.test(t)) return "force";
   if (/\b(go|enter|return|back|walk|head|leave|storehouse|yard|door|inside)\b/.test(t)) return "move";
   if (/\b(talk|ask|say|hello|speak|colm|warden)\b/.test(t)) return "talk";
   return "other";
@@ -47,6 +47,7 @@ export function legalOptions(state: GameState): BrokerOption[] {
   const goblinAlive = hp(state, "goblin") > 0;
   if (scene === "yard") {
     options.push({ id: "res_listen", requirement: "optional", applicability: "speak with Colm", rollOwner: "none", engine: "none", intent: "talk" });
+    if (state.flags.doorOpen) options.push({ id: "res_into_storehouse", requirement: "optional", applicability: "go into the open storehouse", rollOwner: "none", engine: "move", intent: "move", sceneId: "storehouse" });
     options.push({ id: "res_to_door", requirement: "optional", applicability: "go to the storehouse door", rollOwner: "none", engine: "move", intent: "move", sceneId: "door" });
   }
   if (scene === "door") {
@@ -63,24 +64,36 @@ export function legalOptions(state: GameState): BrokerOption[] {
   return options;
 }
 
-export function chooseOption(options: BrokerOption[], intent: IntentKind, playerText: string, resolutionChoice: string | null): BrokerOption | undefined {
+export function chooseOption(state: GameState, options: BrokerOption[], intent: IntentKind, playerText: string, resolutionChoice: string | null): BrokerOption | undefined {
   const mandatory = options.filter((option) => option.requirement === "mandatory");
   if (mandatory.length === 1) return mandatory[0];
+  const inside = options.find((option) => option.id === "res_inside" || option.sceneId === "storehouse");
+  if ((intent === "force" || /\b(force|open|shoulder|pry|bar|beam)\b/i.test(playerText)) && state.flags.doorOpen && inside && state.currentSceneId === "door") return inside;
   if (resolutionChoice) {
     const chosen = options.find((option) => option.id === resolutionChoice);
     if (chosen && (chosen.intent === intent || intent === "other")) return chosen;
   }
-  if (intent === "move") return pickMove(options, playerText);
+  if (intent === "force") return options.find((option) => option.intent === "force");
+  if (intent === "move") return pickMove(state, options, playerText);
   return options.find((option) => option.intent === intent);
 }
 
-function pickMove(options: BrokerOption[], playerText: string): BrokerOption | undefined {
+function pickMove(state: GameState, options: BrokerOption[], playerText: string): BrokerOption | undefined {
   const moves = options.filter((option) => option.engine === "move");
   const text = playerText.toLowerCase();
-  if (/\b(storehouse|inside|enter|in)\b/.test(text)) return moves.find((option) => option.sceneId === "storehouse") ?? moves[0];
-  if (/\b(door|bar)\b/.test(text)) return moves.find((option) => option.sceneId === "door") ?? moves[0];
-  if (/\b(yard|back|colm|return|leave)\b/.test(text)) return moves.find((option) => option.sceneId === "yard") ?? moves[0];
-  return moves[0];
+  const wantStorehouse = /\b(storehouse|inside|enter|room)\b/.test(text);
+  const wantDoor = /\b(door|bar)\b/.test(text);
+  const wantYard = /\b(yard|back|colm|return|leave)\b/.test(text);
+  if (wantStorehouse) {
+    if (state.currentSceneId === "storehouse") return undefined;
+    return moves.find((option) => option.sceneId === "storehouse") ?? moves.find((option) => option.sceneId === "door");
+  }
+  if (wantDoor) return moves.find((option) => option.sceneId === "door");
+  if (wantYard) {
+    if (state.currentSceneId === "yard") return undefined;
+    return moves.find((option) => option.sceneId === "yard");
+  }
+  return undefined;
 }
 
 export function publicOptions(options: BrokerOption[]): Array<{ id: string; requirement: BrokerOption["requirement"]; applicability: string }> {
